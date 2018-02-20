@@ -31,7 +31,7 @@ width:80%;
 background: linear-gradient(#AED6F1, #e6f2ff);
 text-align: justify;
 margin: auto;
-color: #000;
+color: #000000;
 border-radius: 10px;
 border-style: outset;
 font-family: "Courier New";
@@ -66,11 +66,13 @@ margin-bottom: 40px;
 }
 .two_line_menu a {
 display: block;
+color: #4A235A;
 text-decoration: none;
 padding:10px;
 }
 .two_line_menu li {
-display: inline-block; 
+display: inline-block;
+color: #4A235A;
 text-shadow: 1px 1px #FFFFFF;
 }
 

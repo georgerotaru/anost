@@ -49,3 +49,22 @@ THE SOFTWARE.
     text-align: left;
     border-style: none;
 }
+.tableforlistings{
+    font-size: 13px;
+    margin: auto;
+    width: 99%;
+    border-style: solid;
+    border-collapse: collapse;
+    margin-bottom: 2%;
+    border-width: 1px;
+}
+.tableforlistings th{
+    border-style: solid;
+    border-width: 2px;
+    text-align: center;
+}
+.tableforlistings td{
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+}

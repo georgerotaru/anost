@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="../../css/menu.css">
+<link rel="stylesheet" type="text/css" href="/anost/css/menu.css">
 
 <div style="color: #4A235A; text-align: right">
     <br/>
@@ -15,7 +15,7 @@
     <li>
         <a href="#">FACEBOOK</a>
         <ul>
-            <li><a href="../../fb/events/index.jsp">Events</a></li>
+            <li><a href="/anost/fb/events/index.jsp">Events</a></li>
         </ul>
     </li>
     <li>
