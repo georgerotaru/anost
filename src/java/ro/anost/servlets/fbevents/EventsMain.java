@@ -90,6 +90,8 @@ public class EventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 } else {
+                    //fb id
+                    String a="";
                     String fbId = "";
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
