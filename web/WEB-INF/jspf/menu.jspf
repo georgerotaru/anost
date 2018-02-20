@@ -2,7 +2,6 @@
 
 <div style="color: #4A235A; text-align: right">
     <br/>
-    <br/>
     <p class="app_name">A N O S T</p>
     <p class="app_description"><b>an</b>other <b>o</b>pen <b>s</b>ource <b>t</b>ool</p>
     <br/>
@@ -16,6 +15,7 @@
         <a href="#">FACEBOOK</a>
         <ul>
             <li><a href="/anost/fb/events/index.jsp">Events</a></li>
+            <li><a href="#">Submenu</a></li>
         </ul>
     </li>
     <li>
@@ -38,8 +38,7 @@
         </ul>
     </li>
     <li>
-        <a href="#">CONTACT</a>
+        <a href="#">ABOUT</a>
     </li>
 </ul>
 </div>
-<hr>

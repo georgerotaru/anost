@@ -17,9 +17,9 @@
         <div class="gradient_menu">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
             <form action="${pageContext.request.contextPath}/EventsMain" method="GET">
-                <table class="tablecenteredwithroundborder" id="noborder" width="40%">
+                <table class="tablecenteredwithroundborder" id="noborder">
                     <tr><td><input type="submit" class="button" name="fbevents_ongoing" value="Display ongoing events"></td>
-                        <td><input type="submit" class="button" name="fbevents_all" value="Display all events"></td>
+                        <td><input type="submit" class="button" name="fbevents_all" value="Display events"></td>
                         <td><input type="reset" class="button" value="Cancel"></td></tr>
                 </table>
                 <br/>
@@ -33,12 +33,12 @@
                     <br/>
                     <table  class="tablecenteredwithroundborder" id="noborder">
                         <tr><td style="text-align: center"><c:out value="${message}"/></td></tr>
-                        <tr><td style="text-align: center">To update its details, push button below</td></tr>
-                        <tr><td style="text-align: center; word-wrap: break-word; word-break: normal"><input type="submit" name="fbevents_updatesg" value="UPDATE"></td></tr>
                     </table>
                 </c:when>
                 </c:choose>
             </form>
+            <br/>
         </div>
+    <%@include file="/WEB-INF/jspf/footer.jspf" %>
     </body>
 </html>
