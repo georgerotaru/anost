@@ -17,10 +17,10 @@
         <div class="gradient_menu">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
             <form action="${pageContext.request.contextPath}/EventsMain" method="GET">
-                <table class="tablecenteredwithroundborder" id="noborder" width="40%">
+                <table class="tablecenteredwithroundborder" id="noborder">
                     <tr><td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="button" value="Add new event"></a></td>
                         <td><input type="submit" class="button" name="fbevents_ongoing" value="Display ongoing events"></td>
-                        <td><input type="submit" class="button" name="fbevents_all" value="Display all events"></td>
+                        <td><input type="submit" class="button" name="fbevents_all" value="Display events"></td>
                 </table>
             </form>
             <c:choose>
@@ -31,6 +31,8 @@
                     </div>
                 </c:when>
             </c:choose>
+            <br/>
         </div>
+    <%@include file="/WEB-INF/jspf/footer.jspf" %>
     </body>
 </html>

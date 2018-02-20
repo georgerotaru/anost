@@ -27,7 +27,8 @@ THE SOFTWARE.
 */
 
 .gradient_menu{
-width:80%;
+width: 95%;
+min-height: 90vh;
 background: linear-gradient(#AED6F1, #e6f2ff);
 text-align: justify;
 margin: auto;
@@ -81,13 +82,21 @@ display: none;
 }
 
 .two_line_menu li:hover ul {
-    display: block;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    top: 40px;
+display: block;
+position: absolute;
+left: 0;
+width: 100%;
+top: 40px;
 }
 
 .two_line_menu li ul li:hover a {
 color: #339966;
+}
+.footer{
+margin-bottom: 0px;
+text-align: center;
+font-size: 12px;
+font-weight: bold;
+color: #000066;
+width: auto;
 }

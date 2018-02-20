@@ -90,7 +90,7 @@ public class EventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 } else {
-                    String fbId = "EAATyQwZCvEZB4BAKAl08cdtV49fZBF7K3V6b4QBPBLudluFfA8wR9bMeNfg9tAvlSyU7oVQ8ZBjwz9AZBcUBG4Keid041c5TZC1SqJvxMafW2lkHB8SuWZChJ8WS4s81rzwADXmBoOSe6yZAErgThpMfrN5hV42khmfMILZADkeJL7g3mwRQupQuvHOZANRbX7dTUZD";
+                    String fbId = "";
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
                     Event eventSearchWithParam = fbClient.fetchObject(eventId, Event.class, Parameter.with("fields", "attending_count,interested_count"));
@@ -115,8 +115,8 @@ public class EventsMain extends HttpServlet {
                     } catch (NullPointerException ex) {
                         eventDetails.add(null);
                     }
-                    String eventUrl = "https://www.facebook.com/events/"+eventId;
-                    eventDetails.add(eventUrl);
+                    
+                    eventDetails.add("https://www.facebook.com/events/"+eventId);
                     
                     Integer eventUsersAttending = eventSearchWithParam.getAttendingCount();
                     Long eventUsersInterested = eventSearchWithParam.getInterestedCount();
@@ -124,10 +124,13 @@ public class EventsMain extends HttpServlet {
                     LinkedList<Double> eventCoordinates = new LinkedList<>();
                     try {
                         eventCoordinates.add(eventSearch.getPlace().getLocation().getLatitude());
+                    } catch (NullPointerException ex) {
+                        eventCoordinates.add(0.0);
+                    }
+                    try {
                         eventCoordinates.add(eventSearch.getPlace().getLocation().getLongitude()); 
                     } catch (NullPointerException ex) {
-                        eventCoordinates.add(null);
-                        eventCoordinates.add(null);
+                        eventCoordinates.add(0.0);
                     }
                     
                     LinkedList<Date> eventDate = new LinkedList<>();
@@ -156,10 +159,14 @@ public class EventsMain extends HttpServlet {
                     } catch (NullPointerException ex) {
                         eventTime.add(null);
                     }
-
+                    try {
+                        eventDetails.add(eventSearch.getDescription());
+                    } catch (NullPointerException ex) {
+                        eventDetails.add(null);
+                    }
                     connection.setAutoCommit(false);
-                    query = "INSERT INTO EVENT_DETAILS(ID, NAME, CITY, PLACE, COUNTRY, ATTENDING_COUNT, INTERESTED_COUNT, LATITUDE, LONGITUDE, START_DATE, START_TIME, END_DATE, END_TIME, URL)"
-                            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    query = "INSERT INTO EVENT_DETAILS(ID, NAME, CITY, PLACE, COUNTRY, ATTENDING_COUNT, INTERESTED_COUNT, LATITUDE, LONGITUDE, START_DATE, START_TIME, END_DATE, END_TIME, URL, DESCRIPTION)"
+                            + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     pstmnt = connection.prepareStatement(query);
                     pstmnt.setString(1, eventId);
                     pstmnt.setString(2, eventDetails.get(0));
@@ -174,7 +181,8 @@ public class EventsMain extends HttpServlet {
                     pstmnt.setTime(11, eventTime.get(0));
                     pstmnt.setDate(12, eventDate.get(1));
                     pstmnt.setTime(13, eventTime.get(1));
-                    pstmnt.setString(14, eventUrl);
+                    pstmnt.setString(14, eventDetails.get(4));
+                    pstmnt.setString(15, eventDetails.get(5));
                     pstmnt.executeUpdate();
                     connection.commit();
                     connection.setAutoCommit(true);
@@ -184,8 +192,35 @@ public class EventsMain extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             } else if (request.getParameter("fbevents_all") != null) {
-                //RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
-                response.sendRedirect("./fb/events/display_events.jsp");
+                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE FROM EVENT_DETAILS");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
+                dispatcher.forward(request, response);
+            } else if (request.getParameter("fbevents_ongoing") != null) {
+                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE FROM EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
+                dispatcher.forward(request, response);
+            } else if (request.getParameter("fbevents_delete") != null) {
+                String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
+                if (selectedCheckboxes != null) {
+                    String query = "DELETE FROM EVENT_DETAILS WHERE ID=?";
+                    pstmnt = connection.prepareStatement(query);
+                    connection.setAutoCommit(false);
+                    for(String parseEvents : selectedCheckboxes){
+                        pstmnt.setString(1, parseEvents);
+                        pstmnt.execute();
+                    }
+                    connection.commit();
+                    connection.setAutoCommit(true);
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "Event(s) deleted from database!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                } else {
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "No event selected!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                }
             }
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);           
