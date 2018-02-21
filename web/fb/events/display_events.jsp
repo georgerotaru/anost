@@ -41,7 +41,7 @@
                 </table>
                 <br/>
                 <table class="tableforlistings">
-                    <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>Go to</th><th>Update time</th></tr>
+                    <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>URL</th><th>Update time</th></tr>
                     <c:forEach var="row" items="${events.rows}">
                         <tr>
                             <td><input type="checkbox" name="events_checkbox" value="${row.ID}"></td>
@@ -52,7 +52,7 @@
                             <td><c:out value="${row.INTERESTED_COUNT}"/></td>
                             <td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.START_DATE}"/></td>
                             <td><fmt:formatDate pattern = "HH:mm" value="${row.START_TIME}"/>
-                            <td><a href="${row.URL}" target="_blank">FB page</a></td>
+                            <td><a href="${row.URL}" target="_blank" title="Event Facebook Page"><img src="/anost/util/pictures/facebook-radius-transparent-logo.png" alt="facebook logo wich takes you to facebook event page" style="width: 3vh; height: 3vh"></a></td>
                             <td><fmt:formatDate pattern = "dd.MM.yyyy HH:mm" value="${row.LAST_UPDATE}"/></td>
                         </tr>
                     </c:forEach>

@@ -28,15 +28,15 @@
                         <td><input type="number" name="fbevents_id" style="width: 300px; text-align: center"></td>
                         <td><input type="submit" name="fbevents_add" value="GO"</td></tr>
                 </table>
-                <c:choose>
+            </form>
+            <c:choose>
                 <c:when test="${inDB == true}">
                     <br/>
-                    <table  class="tablecenteredwithroundborder" id="noborder">
-                        <tr><td style="text-align: center"><c:out value="${message}"/></td></tr>
-                    </table>
+                    <div style="text-align: center">
+                        ${message}
+                    </div>
                 </c:when>
-                </c:choose>
-            </form>
+            </c:choose>
             <br/>
         </div>
     <%@include file="/WEB-INF/jspf/footer.jspf" %>

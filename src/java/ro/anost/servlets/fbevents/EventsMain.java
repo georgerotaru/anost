@@ -27,6 +27,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import com.restfb.exception.FacebookGraphException;
 import com.restfb.types.Event;
 import java.io.IOException;
 import java.sql.Connection;
@@ -124,12 +125,9 @@ public class EventsMain extends HttpServlet {
                     LinkedList<Double> eventCoordinates = new LinkedList<>();
                     try {
                         eventCoordinates.add(eventSearch.getPlace().getLocation().getLatitude());
+                        eventCoordinates.add(eventSearch.getPlace().getLocation().getLongitude());
                     } catch (NullPointerException ex) {
                         eventCoordinates.add(0.0);
-                    }
-                    try {
-                        eventCoordinates.add(eventSearch.getPlace().getLocation().getLongitude()); 
-                    } catch (NullPointerException ex) {
                         eventCoordinates.add(0.0);
                     }
                     
@@ -188,11 +186,11 @@ public class EventsMain extends HttpServlet {
                     connection.setAutoCommit(true);
                     request.setAttribute("inDB", true);
                     request.setAttribute("message", "Event \""+eventDetails.get(0)+"\" added to database!");
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 }
             } else if (request.getParameter("fbevents_all") != null) {
-                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS ORDER BY START_DATE ASC");
+                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS ORDER BY START_DATE DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if (request.getParameter("fbevents_ongoing") != null) {
@@ -228,7 +226,19 @@ public class EventsMain extends HttpServlet {
             }
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);           
-        } finally{
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("inDB", true);
+            request.setAttribute("message", "Unsupported request. Object ID does not exist, cannot be loaded due to missing permissions or does not support this operation.<br/> Please try again using correct parameters!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+            dispatcher.forward(request, response);
+        } catch (FacebookGraphException ex){
+            Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("inDB", true);
+            request.setAttribute("message", "Unsupported request. Object with ID '"+request.getParameter("fbevents_id")+"' does not exist, cannot be loaded due to missing permissions or does not support this operation.<br/> Please try again using correct parameters!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+            dispatcher.forward(request, response);
+        }finally{
             if (resultSet != null){
                 try{
                     resultSet.close();
