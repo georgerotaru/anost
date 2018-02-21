@@ -90,8 +90,6 @@ public class EventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 } else {
-                    //fb id
-                    String a="";
                     String fbId = "";
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
@@ -194,14 +192,14 @@ public class EventsMain extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             } else if (request.getParameter("fbevents_all") != null) {
-                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE FROM EVENT_DETAILS");
+                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS ORDER BY START_DATE ASC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if (request.getParameter("fbevents_ongoing") != null) {
-                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE FROM EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE");
+                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE ORDER BY START_DATE ASC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
-            } else if (request.getParameter("fbevents_delete") != null) {
+            } else if ("Delete".equals(request.getParameter("fbevents_delete"))) {
                 String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
                 if (selectedCheckboxes != null) {
                     String query = "DELETE FROM EVENT_DETAILS WHERE ID=?";
@@ -223,6 +221,10 @@ public class EventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
                     dispatcher.forward(request, response);
                 }
+            } else if (request.getParameter("event_details") != null) {
+                request.setAttribute("eventID", request.getParameter("event_details"));
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/details.jsp");
+                dispatcher.forward(request, response);
             }
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);           

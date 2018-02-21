@@ -14,7 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="/anost/css/button.css">
-        <title>anost - fb.. events - Display all events</title>
+        <title>anost - fb.. events - Display events</title>
     </head>
     <body>
         <sql:setDataSource
@@ -33,22 +33,26 @@
                     <tr><td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="button" value="Add new event"></a></td>
                         <td><input type="submit" class="button" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="button" name="fbevents_all" value="Display events"></td>
+                        
+                        <td><input type="submit" class="button" name="fbevents_update" value="Update"></td>
+                        
                         <td><input type="submit" class="button" name="fbevents_delete" value="Delete"></td>
                         <td><input type="reset" class="button" value="Cancel"></td></tr>
                 </table>
                 <br/>
                 <table class="tableforlistings">
-                    <tr><th><input type="checkbox" name="alleventspg__checkboxall"></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>Update time</th></tr>
+                    <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>Go to</th><th>Update time</th></tr>
                     <c:forEach var="row" items="${events.rows}">
                         <tr>
                             <td><input type="checkbox" name="events_checkbox" value="${row.ID}"></td>
-                            <td><c:out value="${row.NAME}"/></td>
+                            <td class="nostyle"><button name="event_details" type="submit" title="click for details" value="${row.ID}"><c:out value="${row.NAME}"/></button></td>
                             <td><c:out value="${row.CITY}"/></td>
                             <td><c:out value="${row.PLACE}"/></td>
                             <td><c:out value="${row.ATTENDING_COUNT}"/></td>
                             <td><c:out value="${row.INTERESTED_COUNT}"/></td>
                             <td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.START_DATE}"/></td>
                             <td><fmt:formatDate pattern = "HH:mm" value="${row.START_TIME}"/>
+                            <td><a href="${row.URL}" target="_blank">FB page</a></td>
                             <td><fmt:formatDate pattern = "dd.MM.yyyy HH:mm" value="${row.LAST_UPDATE}"/></td>
                         </tr>
                     </c:forEach>
