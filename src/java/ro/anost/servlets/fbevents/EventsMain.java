@@ -38,7 +38,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -81,7 +83,7 @@ public class EventsMain extends HttpServlet {
             statement = connection.createStatement();
             if (request.getParameter("fbevents_add") != null) {
                 String eventId = request.getParameter("fbevents_id");
-                String query = "SELECT * FROM EVENT_DETAILS WHERE ID='"+eventId+"'";
+                String query = "SELECT * FROM FB_EVENT_DETAILS WHERE EVENT_ID='"+eventId+"'";
                 resultSet = statement.executeQuery(query);
                 Boolean resultSetHasRows = resultSet.next();
                 if (resultSetHasRows) {
@@ -95,6 +97,8 @@ public class EventsMain extends HttpServlet {
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
                     Event eventSearchWithParam = fbClient.fetchObject(eventId, Event.class, Parameter.with("fields", "attending_count,interested_count"));
+                    String searchCriteria = eventId+"/admins";
+                    com.restfb.Connection<Event> eventAdmins = fbClient.fetchConnection(searchCriteria, Event.class);
                     LinkedList<String> eventDetails = new LinkedList<>();
                     try {
                         eventDetails.add(eventSearch.getName());
@@ -162,8 +166,18 @@ public class EventsMain extends HttpServlet {
                     } catch (NullPointerException ex) {
                         eventDetails.add(null);
                     }
+                    
+                    String userID = "";
+                    String userDisplayName = "";
+                    HashMap<String, String> eventAdminList = new HashMap<>();
+                    for (int i=0; i<eventAdmins.getData().size(); i++) {
+                        userID = eventAdmins.getData().get(i).getId();
+                        userDisplayName = eventAdmins.getData().get(i).getName();
+                        eventAdminList.put(userID, userDisplayName);
+                    }
+                    
                     connection.setAutoCommit(false);
-                    query = "INSERT INTO EVENT_DETAILS(ID, NAME, CITY, PLACE, COUNTRY, ATTENDING_COUNT, INTERESTED_COUNT, LATITUDE, LONGITUDE, START_DATE, START_TIME, END_DATE, END_TIME, URL, DESCRIPTION)"
+                    query = "INSERT INTO FB_EVENT_DETAILS(EVENT_ID, NAME, CITY, PLACE, COUNTRY, ATTENDING_COUNT, INTERESTED_COUNT, LATITUDE, LONGITUDE, START_DATE, START_TIME, END_DATE, END_TIME, URL, DESCRIPTION)"
                             + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                     pstmnt = connection.prepareStatement(query);
                     pstmnt.setString(1, eventId);
@@ -182,6 +196,33 @@ public class EventsMain extends HttpServlet {
                     pstmnt.setString(14, eventDetails.get(4));
                     pstmnt.setString(15, eventDetails.get(5));
                     pstmnt.executeUpdate();
+                    
+                    for (Entry<String, String> entry : eventAdminList.entrySet()){
+                        String key = entry.getKey();
+                        String value = entry.getValue();
+                        query = "INSERT INTO FB_EVENT_ADMINS VALUES (?,?)";
+                        pstmnt = connection.prepareStatement(query);
+                        pstmnt.setString(1, eventId);
+                        pstmnt.setString(2, key);
+                        pstmnt.executeUpdate();
+                        query = "SELECT USER_ID FROM FB_USER_IDENTITY WHERE USER_ID='"+key+"'";
+                        resultSet = statement.executeQuery(query);
+                        resultSetHasRows = resultSet.next();
+                        if (resultSetHasRows) {
+                            query = "UPDATE FB_USER_IDENTITY SET USER_DISPLAY_NAME = ? WHERE USER_ID = ?";
+                            pstmnt = connection.prepareStatement(query);
+                            pstmnt.setString(1, value);
+                            pstmnt.setString(2, key);
+                            pstmnt.executeUpdate();
+                        } else {
+                            query = "INSERT INTO FB_USER_IDENTITY VALUES (?,?)";
+                            pstmnt = connection.prepareStatement(query);
+                            pstmnt.setString(1, key);
+                            pstmnt.setString(2, value);
+                            pstmnt.executeUpdate();                            
+                        }
+                    }
+                    
                     connection.commit();
                     connection.setAutoCommit(true);
                     request.setAttribute("inDB", true);
@@ -190,17 +231,17 @@ public class EventsMain extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             } else if (request.getParameter("fbevents_all") != null) {
-                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS ORDER BY START_DATE DESC");
+                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS ORDER BY START_DATE DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if (request.getParameter("fbevents_ongoing") != null) {
-                request.setAttribute("queryDB", "SELECT ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE ORDER BY START_DATE ASC");
+                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE ORDER BY START_DATE ASC, ATTENDING_COUNT DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if ("Delete".equals(request.getParameter("fbevents_delete"))) {
                 String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
                 if (selectedCheckboxes != null) {
-                    String query = "DELETE FROM EVENT_DETAILS WHERE ID=?";
+                    String query = "DELETE FROM FB_EVENT_DETAILS WHERE EVENT_ID=?";
                     pstmnt = connection.prepareStatement(query);
                     connection.setAutoCommit(false);
                     for(String parseEvents : selectedCheckboxes){
@@ -252,18 +293,18 @@ public class EventsMain extends HttpServlet {
                 } catch (SQLException ex){
                     Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }	
-            if (connection != null){
-                try{
-                    connection.close();
-                } catch(SQLException ex){
-                    Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
             if (pstmnt != null){
                 try{
                     pstmnt.close();
                 } catch (SQLException ex){
+                    Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null){
+                try{
+                    connection.close();
+                } catch(SQLException ex){
                     Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

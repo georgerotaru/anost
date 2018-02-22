@@ -24,7 +24,7 @@
             password="anost"
             url="jdbc:derby://localhost:1527/anost_db;create=true"/>
         <sql:query dataSource="${myDB}" var="event">
-            SELECT * FROM EVENT_DETAILS WHERE ID='<c:out value="${eventID}"/>'
+            SELECT * FROM FB_EVENT_DETAILS WHERE EVENT_ID='<c:out value="${eventID}"/>'
         </sql:query>
         <div class="gradient_menu">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
@@ -33,17 +33,35 @@
                     <tr><td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="button" value="Add new event"></a></td>
                         <td><input type="submit" class="button" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="button" name="fbevents_all" value="Display events"></td>
-
                         <td><input type="submit" class="button" name="fbevents_update" value="Update Event"></td>
-
                 </table>
                 <br/>
             </form>
             <c:forEach var="row" items="${event.rows}">
-            <table width="95%" style="border-style: solid; margin: auto">
-                <tr><th colspan="2" style="text-align: center"><c:out value="${row.ID}"/></th></tr>
-                <tr><th colspan="2" style="text-align: center"><c:out value="${row.NAME}"/></th></tr>
-                <tr><td style="border-style: solid" width="60%">a</td><td style="border-style: solid" width="40%">b</td></tr>
+            <table class="tableforlistings" width="95%">
+                <tr><td width="60%">
+                        <table class="intabledetails">
+                            <tr><td style="width: 30%">Facebook event ID</td><td><a href="${row.URL}" target="_blank" title="Event Facebook Page"><c:out value="${row.EVENT_ID}"/></a></td></tr>
+                            <tr><td>Event name</td><td><c:out value="${row.NAME}"/></td></tr>
+                            <tr><td>City</td><td><c:out value="${row.CITY}"/></td></tr>
+                            <tr><td>Place</td><td><c:out value="${row.PLACE}"/></td></tr>
+                            <tr><td>Country</td><td><c:out value="${row.COUNTRY}"/></td></tr>
+                            <tr><td colspan="2">
+                            <table class="intabledetails">
+                                <tr><td>latitude</td><td>longitude</td></tr>
+                                <tr><td><c:out value="${row.LATITUDE}"/></td><td><c:out value="${row.LONGITUDE}"/></td></tr>
+                            </table >
+                                </td></tr>
+                            <tr><td style="width: 40vh">People attending</td><td style="width: 40vh"><c:out value="${row.ATTENDING_COUNT}"/></td></tr>
+                            <tr><td>People interested</td><td><c:out value="${row.INTERESTED_COUNT}"/></td></tr>
+                            <tr><td>Start date</td><td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.START_DATE}"/> <fmt:formatDate pattern = "HH:mm" value="${row.START_TIME}"/></td></tr>
+                            <tr><td>End date</td><td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.END_DATE}"/> <fmt:formatDate pattern = "HH:mm" value="${row.END_TIME}"/></td></tr>
+                            <tr><td>Last details update</td><td><c:out value="${row.LAST_UPDATE}"/></td></tr>
+                        </table>
+                    </td>
+                    <td style="text-align: justify; padding: 10px" width="40%">
+                        <c:out value="${row.DESCRIPTION}"/>
+                    </td></tr>
             </table>
             </c:forEach>
         </div>

@@ -26,45 +26,53 @@ THE SOFTWARE.
     Author     : George
 */
 .button{
-    border-radius: 5px;
-    border-width: 1px;
-    background-color: whitesmoke;
-    box-shadow: 0px 0px 5px darkgray;
-    font-size: 14px;
+border-radius: 5px;
+border-width: 1px;
+background-color: whitesmoke;
+box-shadow: 0px 0px 5px darkgray;
+font-size: 14px;
 }
 .button:hover{
-    background-color: aliceblue;
-    border-color: white;
+background-color: aliceblue;
+border-color: white;
     
 }
 .tablecenteredwithroundborder{
-    margin-left:auto; 
-    margin-right:auto;
-    border-width: 1px;
-    border-radius: 5px;
-    border-style: none;
-    border-color: darkgray;
+margin-left:auto; 
+margin-right:auto;
+border-width: 1px;
+border-radius: 5px;
+border-style: none;
+border-color: darkgray;
 }
 #noborder td{
-    text-align: left;
-    border-style: none;
+text-align: left;
+border-style: none;
 }
 .tableforlistings{
-    font-size: 13px;
-    margin: auto;
-    width: 99%;
-    border-style: solid;
-    border-collapse: collapse;
-    margin-bottom: 2%;
-    border-width: 1px;
+font-size: 15px;
+margin: auto;
+width: 99%;
+border-style: solid;
+border-collapse: collapse;
+margin-bottom: 2%;
+border-width: 1px;
 }
 .tableforlistings th{
-    border-style: solid;
-    border-width: 2px;
-    text-align: center;
+border-style: solid;
+border-width: 2px;
+text-align: center;
 }
 .tableforlistings td{
-    text-align: center;
-    border-style: solid;
-    border-width: 1px;
+text-align: center;
+border-style: solid;
+border-width: 1px;
+}
+.intabledetails {
+margin: auto;
+border-style: none;
+font-size: 16px;
+}
+.intabledetails td{
+border-style: none;
 }

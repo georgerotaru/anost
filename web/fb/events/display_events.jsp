@@ -45,7 +45,7 @@
                     <c:forEach var="row" items="${events.rows}">
                         <tr>
                             <td><input type="checkbox" name="events_checkbox" value="${row.ID}"></td>
-                            <td class="nostyle"><button name="event_details" type="submit" title="click for details" value="${row.ID}"><c:out value="${row.NAME}"/></button></td>
+                            <td class="nostyle"><button name="event_details" type="submit" title="click for details" value="${row.EVENT_ID}"><c:out value="${row.NAME}"/></button></td>
                             <td><c:out value="${row.CITY}"/></td>
                             <td><c:out value="${row.PLACE}"/></td>
                             <td><c:out value="${row.ATTENDING_COUNT}"/></td>
