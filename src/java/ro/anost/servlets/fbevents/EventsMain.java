@@ -38,6 +38,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -93,7 +94,7 @@ public class EventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 } else {
-                    String fbId = "";
+                    String fbId = "EAATyQwZCvEZB4BAOZA3ueFxZA6iIaHJ5ZClj6IqZBvYWj58IpZCVEMKIvO3wSdqdRbBh5RhwA4ZBT0IaJ4yM9piR0wODOBYi7jZCtopQ2gJ6q10jnoGepuPj42aJ5mZBZC68JaO2AzQL7rKj6LyYHgpBmlSQgNKB8ZCJo1T0hND8UkMIHgZDZD";
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
                     Event eventSearchWithParam = fbClient.fetchObject(eventId, Event.class, Parameter.with("fields", "attending_count,interested_count"));
@@ -264,6 +265,118 @@ public class EventsMain extends HttpServlet {
                 request.setAttribute("eventID", request.getParameter("event_details"));
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/details.jsp");
                 dispatcher.forward(request, response);
+             } else if (request.getParameter("fbevents_update") != null) {
+                 String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
+                if (selectedCheckboxes != null) {
+                    for(String parseEvents : selectedCheckboxes){
+                        String fbId = "EAATyQwZCvEZB4BAOZA3ueFxZA6iIaHJ5ZClj6IqZBvYWj58IpZCVEMKIvO3wSdqdRbBh5RhwA4ZBT0IaJ4yM9piR0wODOBYi7jZCtopQ2gJ6q10jnoGepuPj42aJ5mZBZC68JaO2AzQL7rKj6LyYHgpBmlSQgNKB8ZCJo1T0hND8UkMIHgZDZD";
+                        FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
+                        Event eventSearch = fbClient.fetchObject(parseEvents, Event.class);
+                        Event eventSearchWithParam = fbClient.fetchObject(parseEvents, Event.class, Parameter.with("fields", "attending_count,interested_count"));
+                        String searchCriteria = parseEvents+"/admins";
+                        com.restfb.Connection<Event> eventAdmins = fbClient.fetchConnection(searchCriteria, Event.class);
+                        LinkedList<String> eventDetails = new LinkedList<>();
+                        try {
+                            eventDetails.add(eventSearch.getName());
+                        } catch (NullPointerException ex) {
+                            eventDetails.add(null);
+                        }
+                        try {
+                            eventDetails.add(eventSearch.getPlace().getLocation().getCity());
+                        } catch (NullPointerException ex) {
+                            eventDetails.add(null);
+                        }
+                        try {
+                            eventDetails.add(eventSearch.getPlace().getName());
+                        } catch (NullPointerException ex) {
+                            eventDetails.add(null);
+                        }
+                        try {
+                            eventDetails.add(eventSearch.getPlace().getLocation().getCountry());
+                        } catch (NullPointerException ex) {
+                            eventDetails.add(null);
+                        }
+
+                        Integer eventUsersAttending = eventSearchWithParam.getAttendingCount();
+                        Long eventUsersInterested = eventSearchWithParam.getInterestedCount();
+
+                        LinkedList<Double> eventCoordinates = new LinkedList<>();
+                        try {
+                            eventCoordinates.add(eventSearch.getPlace().getLocation().getLatitude());
+                            eventCoordinates.add(eventSearch.getPlace().getLocation().getLongitude());
+                        } catch (NullPointerException ex) {
+                            eventCoordinates.add(0.0);
+                            eventCoordinates.add(0.0);
+                        }
+
+                        LinkedList<Date> eventDate = new LinkedList<>();
+                        LinkedList<Time> eventTime = new LinkedList<>();    
+                        try {
+                            java.sql.Date date = new java.sql.Date(eventSearch.getStartTime().getTime());
+                            eventDate.add(date);
+                        } catch (NullPointerException ex) {
+                            eventDate.add(null);
+                        }
+                        try {
+                            java.sql.Time time = new java.sql.Time(eventSearch.getStartTime().getTime());
+                            eventTime.add(time);
+                        } catch (NullPointerException ex) {
+                            eventTime.add(null);
+                        }
+                        try {
+                            java.sql.Date date = new java.sql.Date(eventSearch.getEndTime().getTime());
+                            eventDate.add(date);
+                        } catch (NullPointerException ex) {
+                            eventDate.add(null);
+                        }
+                        try {
+                            java.sql.Time time = new java.sql.Time(eventSearch.getEndTime().getTime());
+                            eventTime.add(time);
+                        } catch (NullPointerException ex) {
+                            eventTime.add(null);
+                        }
+                        try {
+                            eventDetails.add(eventSearch.getDescription());
+                        } catch (NullPointerException ex) {
+                            eventDetails.add(null);
+                        }
+
+                        connection.setAutoCommit(false);
+                        String query = "UPDATE FB_EVENT_DETAILS SET NAME=?, CITY=?, PLACE=?, COUNTRY=?, ATTENDING_COUNT=?, INTERESTED_COUNT=?, LATITUDE=?, LONGITUDE=?, START_DATE=?, START_TIME=?, END_DATE=?, END_TIME=?, LAST_UPDATE=?, DESCRIPTION=? WHERE EVENT_ID='"+
+                                parseEvents+"'";
+                        pstmnt = connection.prepareStatement(query);
+
+                        pstmnt.setString(1, eventDetails.get(0));
+                        pstmnt.setString(2, eventDetails.get(1));
+                        pstmnt.setString(3, eventDetails.get(2));
+                        pstmnt.setString(4, eventDetails.get(3));
+                        pstmnt.setInt(5, eventUsersAttending);
+                        pstmnt.setLong(6, eventUsersInterested);
+                        pstmnt.setDouble(7, eventCoordinates.get(0));
+                        pstmnt.setDouble(8, eventCoordinates.get(1));
+                        pstmnt.setDate(9, eventDate.get(0));
+                        pstmnt.setTime(10, eventTime.get(0));
+                        pstmnt.setDate(11, eventDate.get(1));
+                        pstmnt.setTime(12, eventTime.get(1));
+                        
+                        java.util.Date nowDateJave = new java.util.Date();
+                        pstmnt.setTimestamp(13, new java.sql.Timestamp(nowDateJave.getTime()));
+                        
+                        pstmnt.setString(14, eventDetails.get(4));
+                        pstmnt.executeUpdate();
+                    }
+                    connection.commit();
+                    connection.setAutoCommit(true);
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "Event(s) updated");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                } else {
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "No event selected!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                }
             }
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(EventsMain.class.getName()).log(Level.SEVERE, null, ex);           

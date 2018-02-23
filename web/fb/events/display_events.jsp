@@ -44,7 +44,7 @@
                     <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>URL</th><th>Update time</th></tr>
                     <c:forEach var="row" items="${events.rows}">
                         <tr>
-                            <td><input type="checkbox" name="events_checkbox" value="${row.ID}"></td>
+                            <td><input type="checkbox" name="events_checkbox" value="${row.EVENT_ID}"></td>
                             <td class="nostyle"><button name="event_details" type="submit" title="click for details" value="${row.EVENT_ID}"><c:out value="${row.NAME}"/></button></td>
                             <td><c:out value="${row.CITY}"/></td>
                             <td><c:out value="${row.PLACE}"/></td>
