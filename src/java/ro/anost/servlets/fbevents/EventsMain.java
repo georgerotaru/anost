@@ -89,11 +89,11 @@ public class EventsMain extends HttpServlet {
                 if (resultSetHasRows) {
                     String eventName = resultSet.getString("NAME");
                     request.setAttribute("inDB", true);
-                    request.setAttribute("message", "Event \""+eventName+"\" already in database!");
+                    request.setAttribute("message", "<div style=\"color: #FF0000\">Event \""+eventName+"\" already in database!</div>");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 } else {
-                    String fbId = "EAATyQwZCvEZB4BAOZA3ueFxZA6iIaHJ5ZClj6IqZBvYWj58IpZCVEMKIvO3wSdqdRbBh5RhwA4ZBT0IaJ4yM9piR0wODOBYi7jZCtopQ2gJ6q10jnoGepuPj42aJ5mZBZC68JaO2AzQL7rKj6LyYHgpBmlSQgNKB8ZCJo1T0hND8UkMIHgZDZD";
+                    String fbId = "";
                     FacebookClient fbClient = new DefaultFacebookClient(fbId, Version.VERSION_2_11);
                     Event eventSearch = fbClient.fetchObject(eventId, Event.class);
                     Event eventSearchWithParam = fbClient.fetchObject(eventId, Event.class, Parameter.with("fields", "attending_count,interested_count"));
@@ -228,7 +228,7 @@ public class EventsMain extends HttpServlet {
                     connection.commit();
                     connection.setAutoCommit(true);
                     request.setAttribute("inDB", true);
-                    request.setAttribute("message", "Event \""+eventDetails.get(0)+"\" added to database!");
+                    request.setAttribute("message", "<div style=\"color: #1C0DCF\">Event \""+eventDetails.get(0)+"\" added to database!</div>");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
                     dispatcher.forward(request, response);
                 }
