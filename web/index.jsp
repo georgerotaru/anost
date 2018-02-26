@@ -10,6 +10,7 @@
     <head>
         <link rel="icon" href="http://example.com/favicon.png">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="icon" type="image/png" href="/anost/util/pictures/logo.png">
         <title>JSP Page</title>
     </head>
     <body>

@@ -11,11 +11,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="/anost/css/button.css">
+        <link rel="icon" type="image/png" href="/anost/util/pictures/logo.png">
         <title>anost - fb.. events</title>
     </head>
     <body>
         <div class="gradient_menu">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
+            <%--page options--%>
             <form action="${pageContext.request.contextPath}/EventsMain" method="GET">
                 <table class="tablecenteredwithroundborder" id="noborder">
                     <tr><td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="button" value="Add new event"></a></td>
@@ -23,6 +25,7 @@
                         <td><input type="submit" class="button" name="fbevents_all" value="Display events"></td>
                 </table>
             </form>
+            <%--display message from servlet--%>
             <c:choose>
                 <c:when test="${inDB == true}">
                     <br/>

@@ -76,3 +76,6 @@ font-size: 16px;
 .intabledetails td{
 border-style: none;
 }
+tr.evenrow td{
+background-color: #F0FFFF;
+}

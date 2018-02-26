@@ -38,7 +38,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -216,10 +215,12 @@ public class EventsMain extends HttpServlet {
                             pstmnt.setString(2, key);
                             pstmnt.executeUpdate();
                         } else {
-                            query = "INSERT INTO FB_USER_IDENTITY VALUES (?,?)";
+                            query = "INSERT INTO FB_USER_IDENTITY VALUES (?,?,?)";
+                            String userURL = "https://www.facebook.com/"+key;
                             pstmnt = connection.prepareStatement(query);
                             pstmnt.setString(1, key);
                             pstmnt.setString(2, value);
+                            pstmnt.setString(3, userURL);
                             pstmnt.executeUpdate();                            
                         }
                     }
