@@ -62,18 +62,21 @@ public class FbLogin extends HttpServlet {
         FacebookClient client = new DefaultFacebookClient(Version.VERSION_2_11);
         String appId = "1392269750899694";
         String appSecret = "10c7f2a99320ad4bb60ad879feab9622";
-        String redirectUrl = "http://localhost:8080/anost/fb/events";
+        String redirectUrl = "http://localhost:8080/anost/";
         Parameter additionalParameters = Parameter.with("state", "");
-        //https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&state=
+        //https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost&state=
         String loginDialogUrlString = client.getLoginDialogUrl(appId, redirectUrl, scopeBuilder, additionalParameters);
-        String verifCode = response.getStatus()
+
         
 //String fbsigninUrl = "https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&scope=email&state=";
 //String fbIdConfirmUrl = "https://graph.facebook.com/v2.11/oauth/access_token?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&client_secret=10c7f2a99320ad4bb60ad879feab9622&code=AQCTv7CDpz_jbVOVRTUnlXtusLZLnFvFsWf408mREvWSXt3SAAkvklbAtZqSEB4PFbH4-HlJCH2LROCpEtvgZQ7WOCUWEZ5Eq7So9aN6NdSLOEvCARYWitoNSf4TzB6a7_KSKiBdwI1ubCfkpgmcH8VklddlvWW6Oo9o6eYauBoK2iSNuoVFj2FITuhfv7K-reAqz5qN_3d_3TkfWiK65UhZHc5kSfXE2zY2wFUdEeL7QXLYUPDpvorlrZQ7Ec_0VESAn-QBYkSSdoYhcYiywcvK2_Q_h5-xnFmMDZf02hUxO8O4GngcnCuqBONR0AyQUS0b0AKNHG1gSEQ9sRZQkdYM#_=_";
         
-        AccessToken accessToken = client.obtainUserAccessToken(appId, appSecret, redirectUrl, verifCode);
-        String accTkn = accessToken.getAccessToken();
-        request.getSession().setAttribute("tok", accTkn);
+        //AccessToken accessToken = client.obtainUserAccessToken(appId, appSecret, redirectUrl, verifCode);
+        //String accTkn = accessToken.getAccessToken();
+        //request.getSession().setAttribute("tok", accTkn);
+        
+        //https://github.com/subhakant0/Facebook-login-restfb/tree/master/src/com/demo/facebook
+        
         RequestDispatcher dispatcher = request.getRequestDispatcher("./util/login.jsp");
         dispatcher.forward(request, response);
     }
