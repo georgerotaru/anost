@@ -45,7 +45,7 @@
                 <br/>
                 <%--display events--%>
                 <table class="tableforlistings">
-                    <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date</th><th>Start time</th><th>URL</th><th>Update time</th></tr>
+                    <tr><th></th><th>Event name</th><th>City</th><th>Place</th><th>Attending no.</th><th>Interested no.</th><th>Start date/ time</th><th>End date/ time</th><th>URL</th><th>Update time</th></tr>
                     <% int counter = 0;
                     String trEvenCssClass = null; %>
                     <c:forEach var="row" items="${events.rows}">
@@ -64,8 +64,8 @@
                             <td><c:out value="${row.PLACE}"/></td>
                             <td><c:out value="${row.ATTENDING_COUNT}"/></td>
                             <td><c:out value="${row.INTERESTED_COUNT}"/></td>
-                            <td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.START_DATE}"/></td>
-                            <td><fmt:formatDate pattern = "HH:mm" value="${row.START_TIME}"/>
+                            <td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.START_DATE}"/> <fmt:formatDate pattern = "HH:mm" value="${row.START_TIME}"/></td>
+                            <td><fmt:formatDate pattern = "dd.MM.yyyy" value="${row.END_DATE}"/> <fmt:formatDate pattern = "HH:mm" value="${row.END_TIME}"/></td>
                             <td><a href="${row.URL}" target="_blank" title="Event Facebook Page"><img src="/anost/util/pictures/facebook-radius-transparent-logo.png" alt="facebook logo wich takes you to facebook event page" style="width: 3vh; height: 3vh"></a></td>
                             <td><fmt:formatDate pattern = "dd.MM.yyyy HH:mm" value="${row.LAST_UPDATE}"/></td>
                         </tr>

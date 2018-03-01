@@ -233,11 +233,11 @@ public class EventsMain extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             } else if (request.getParameter("fbevents_all") != null) {
-                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS ORDER BY START_DATE DESC");
+                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, END_DATE, END_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS ORDER BY START_DATE DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if (request.getParameter("fbevents_ongoing") != null) {
-                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS WHERE START_DATE >= CURRENT_DATE ORDER BY START_DATE ASC, ATTENDING_COUNT DESC");
+                request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, END_DATE, END_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS WHERE (START_DATE >= CURRENT_DATE) or (END_DATE >= CURRENT_DATE) ORDER BY START_DATE ASC, ATTENDING_COUNT DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
             } else if ("Delete".equals(request.getParameter("fbevents_delete"))) {
