@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 George.
+ * Copyright 2018 George <mrgeorge.ro@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,26 @@
  */
 package ro.anost.servlets.fbevents;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.FacebookClient.AccessToken;
-import com.restfb.Parameter;
-import com.restfb.Version;
-import com.restfb.scope.FacebookPermissions;
-import com.restfb.scope.ScopeBuilder;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import ro.anost.beans.FbEvents;
+import ro.anost.utils.JDBCUtil;
+import ro.anost.utils.MyUtils;
 
 /**
  *
- * @author George
+ * @author George <mrgeorge.ro@gmail.com>
  */
-public class FbLogin extends HttpServlet {
+public class TestServletEventList extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,29 +56,15 @@ public class FbLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        ScopeBuilder scopeBuilder = new ScopeBuilder();
-        scopeBuilder.addPermission(FacebookPermissions.EMAIL);
-        
-        FacebookClient client = new DefaultFacebookClient(Version.VERSION_2_11);
-        String appId = "1392269750899694";
-        String appSecret = "10c7f2a99320ad4bb60ad879feab9622";
-        String redirectUrl = "http://localhost:8080/anost/";
-        Parameter additionalParameters = Parameter.with("state", "");
-        //https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost&state=
-        String loginDialogUrlString = client.getLoginDialogUrl(appId, redirectUrl, scopeBuilder, additionalParameters);
-
-        
-//String fbsigninUrl = "https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&scope=email&state=";
-//String fbIdConfirmUrl = "https://graph.facebook.com/v2.11/oauth/access_token?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&client_secret=10c7f2a99320ad4bb60ad879feab9622&code=AQCTv7CDpz_jbVOVRTUnlXtusLZLnFvFsWf408mREvWSXt3SAAkvklbAtZqSEB4PFbH4-HlJCH2LROCpEtvgZQ7WOCUWEZ5Eq7So9aN6NdSLOEvCARYWitoNSf4TzB6a7_KSKiBdwI1ubCfkpgmcH8VklddlvWW6Oo9o6eYauBoK2iSNuoVFj2FITuhfv7K-reAqz5qN_3d_3TkfWiK65UhZHc5kSfXE2zY2wFUdEeL7QXLYUPDpvorlrZQ7Ec_0VESAn-QBYkSSdoYhcYiywcvK2_Q_h5-xnFmMDZf02hUxO8O4GngcnCuqBONR0AyQUS0b0AKNHG1gSEQ9sRZQkdYM#_=_";
-        
-        //AccessToken accessToken = client.obtainUserAccessToken(appId, appSecret, redirectUrl, verifCode);
-        //String accTkn = accessToken.getAccessToken();
-        //request.getSession().setAttribute("tok", accTkn);
-        
-        //https://github.com/bchittibabu100/SimpleWebApp
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("./util/login.jsp");
+        Connection conn = MyUtils.getStoredConnection(request);
+        List<FbEvents> list = null;
+        try{
+            list = JDBCUtil.displayEvents(conn);
+        } catch (SQLException ex) {
+            Logger.getLogger(TestServletEventList.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        request.setAttribute("fbEventsList", list);
+        RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/test.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -107,7 +94,7 @@ public class FbLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 George.
+ * Copyright 2018 George <mrgeorge.ro@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,35 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ro.anost.util;
+package ro.anost.utils;
+
+import java.sql.Connection;
+import javax.servlet.ServletRequest;
 
 /**
  *
- * @author George
+ * @author George <mrgeorge.ro@gmail.com>
  */
-public class FbLoginTest {
-    private String fbLoginTest;
-    private String fbUserToken;
-
-    public FbLoginTest() {
-        fbLoginTest = null;
-        fbUserToken = null;
-    }
-
-    public String getFbLoginTest() {
-        return fbLoginTest;
-    }
-
-    public void setFbLoginTest(String fbLoginTest) {
-        this.fbLoginTest = fbLoginTest;
-    }
-
-    public String getFbUserToken() {
-        return fbUserToken;
-    }
-
-    public void setFbUserToken(String fbUserToken) {
-        this.fbUserToken = fbUserToken;
-    }
-
+public class MyUtils {
+    public static final String ATT_NAME_CONNECTION = "ATTRIBUTE_FOR_CONNECTION";
+    
+    // Get the Connection object has been stored in one attribute of the request.
+   public static Connection getStoredConnection(ServletRequest request) {
+       Connection conn = (Connection) request.getAttribute(ATT_NAME_CONNECTION);
+       return conn;
+   }
 }
