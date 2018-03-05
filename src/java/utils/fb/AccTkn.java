@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 George <mrgeorge.ro@gmail.com>.
+ * Copyright 2018 George <mrgeorge.ro @ gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ro.anost.connection;
+package utils.fb;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.restfb.FacebookClient.AccessToken;
+import java.util.Date;
 
 /**
- * This class is used to make a connection to the app's database, close it or roll back instructions
- * that have not been commited
- * @author George <mrgeorge.ro@gmail.com>
+ *
  */
-public class DbConnection {
-    public static Connection getConnection() throws ClassNotFoundException, SQLException{
-        return JDBCConnection.getJDBCConnection();
-    }
-    public static void closeConnectionQuietly(Connection conn){
+public final class AccTkn {
+    private static String fbAccessToken;
+    private String verifCode;
+    private static Date tknExpDate;
+
+    public void setFbAccessToken(String verifCode) {
+        FbAppCredentials fbAppCredentials = new FbAppCredentials();
         try{
-            conn.close();
-        } catch (SQLException ex) {
+            AccessToken accessToken = CreateFbClient.getClient().obtainUserAccessToken(fbAppCredentials.getAPPID(), fbAppCredentials.getAPPSECRET(), fbAppCredentials.getREDIRECTURL(), verifCode);
+            fbAccessToken = accessToken.getAccessToken();
+            long mili = accessToken.getExpires().getTime();
+            tknExpDate = new Date(mili);
+        }catch(NullPointerException ex){
+            System.out.println("Error creating access token object");
+            System.out.println("Access token is "+fbAccessToken);
         }
     }
-    public static void rollbackQuietly(Connection conn){
-        try{
-            conn.rollback();
-        } catch (SQLException ex){
-        }
+
+    public static String getFbAccessToken() {
+        return fbAccessToken;
     }
+
+    public static Date getTknExpDate() {
+        return tknExpDate;
+    }
+    
 }

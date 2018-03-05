@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 George <mrgeorge.ro@gmail.com>.
+ * Copyright 2018 George <mrgeorge.ro @ gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package ro.anost.utils;
+package utils.fb;
 
-import java.sql.Connection;
-import javax.servlet.ServletRequest;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Version;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author George <mrgeorge.ro@gmail.com>
  */
-public class MyUtils {
-    public static final String ATT_NAME_CONNECTION = "ATTRIBUTE_FOR_CONNECTION";
+public class CreateFbClient {
+    static FacebookClient client;
+    static FacebookClient fbClient;
+
+    public static FacebookClient getClient() {
+        client = new DefaultFacebookClient(Version.VERSION_2_11);
+        return client;
+    }
+
+    public static FacebookClient getFbClient() {
+        try{
+            fbClient = new DefaultFacebookClient(AccTkn.getFbAccessToken(), Version.VERSION_2_11);            
+        }catch(NullPointerException ex){
+            System.out.println("Problem creating fbClient object. Most probably no access token aquired.");
+            Logger.getLogger(CreateFbClient.class.getName()).log(Level.SEVERE, null, ex);   
+        }
+        return fbClient;
+    }
     
-    // Get the Connection object has been stored in one attribute of the request.
-   public static Connection getStoredConnection(ServletRequest request) {
-       Connection conn = (Connection) request.getAttribute(ATT_NAME_CONNECTION);
-       return conn;
-   }
 }

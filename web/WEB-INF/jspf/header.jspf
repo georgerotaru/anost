@@ -1,0 +1,11 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="description" content="Free OSINT tool">
+<meta name="author" content="George - mrgeorge.ro@gmail.com">
+<link rel="icon" type="image/png" href="/anost/util/pictures/logo.png">
+<link rel="stylesheet" type="text/css" href="/anost/css/appbody.css">
+<link rel="stylesheet" type="text/css" href="/anost/css/mainmenu.css">
+<link rel="stylesheet" type="text/css" href="/anost/css/buttons.css">
+<title>ANOST - free open source tool</title>

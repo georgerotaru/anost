@@ -4,6 +4,13 @@
     Author     : George
 --%>
 
+<%@page import="com.restfb.FacebookClient.AccessToken"%>
+<%@page import="com.restfb.Parameter"%>
+<%@page import="com.restfb.Version"%>
+<%@page import="com.restfb.DefaultFacebookClient"%>
+<%@page import="com.restfb.FacebookClient"%>
+<%@page import="com.restfb.scope.FacebookPermissions"%>
+<%@page import="com.restfb.scope.ScopeBuilder"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,9 +21,15 @@
         <title>Test FB Login</title>
     </head>
     <body>
-        <h1>Login to Facebook</h1>
-        <form action="${pageContext.request.contextPath}/FbLogin}" method="GET">
-            <input type="submit" name="indexpg_gobutton"/>
-        </form>
+        <h1>Logged in?</h1>
+        <%--<c:choose>
+            <c:when test="${loggedin == true}">
+                loggedin = ${loggedin}
+            </c:when>
+            <c:otherwise>
+                <c:redirect url="https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/FbLogin"/>
+            </c:otherwise>
+        </c:choose>--%>
+        
     </body>
 </html>

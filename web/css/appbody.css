@@ -1,0 +1,118 @@
+/*
+The MIT License
+
+Copyright 2018 George <mrgeorge.ro @ gmail.com>.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+/* 
+    Created on : Mar 3, 2018, 9:49:48 AM
+    Author     : George <mrgeorge.ro @ gmail.com>
+*/
+
+.mainscreen{
+    width: 95%;
+    min-height: 94vh;
+    background: linear-gradient(#AED6F1, #e6f2ff);
+    margin: auto;
+    color: #000000;
+    border-radius: 10px;
+    border-style: outset;
+    font-family: "Times New Roman";
+}
+footer{
+    margin-bottom: 0px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000066;
+    width: auto;
+}
+.apptitle{
+    text-align: right;
+    padding-right: 2%;
+    color: #4A235A;
+}
+#appname{
+    font-family: "Bookman Old Style";
+    font-size: 30px;
+    font-weight: bolder;
+    text-shadow: 2px 2px #FFFFFF;
+}
+#appdescription{
+    font-family: "Comic Sans MS";
+    font-size: 20px;
+}
+.noboredcentertable{
+    margin-left:auto; 
+    margin-right:auto;
+    border-style: none;
+    text-align: center;
+}
+.noboredcentertable th{
+    border-style: none;
+}
+.noboredcentertable td{
+    border-style: none;
+}
+.intabledetails {
+    margin: auto;
+    border-style: none;
+    font-size: 16px;
+}
+.intabledetails td{
+    border-style: none;
+}
+.tableforlistings{
+    font-size: 15px;
+    margin: auto;
+    width: 99%;
+    border-style: solid;
+    border-collapse: collapse;
+    margin-bottom: 2%;
+    border-width: 2px;
+    border-color: #000000;
+    text-align: center;
+}
+.tableforlistings tr{
+    border-style: solid;
+    border-collapse: collapse;
+    border-width: 1px;
+    border-color: red;
+}
+.tableforlistings tr:nth-child(even){
+    background-color: #A9D0F5;
+}
+.tableforlistings tr:nth-child(odd){
+    background-color: #EFFBFB;
+}
+.tableforlistings th{
+    background-color: #2980B9;
+    color: #FFFFFF;
+}
+.abouttable{
+    margin: auto;
+    border-collapse: collapse;
+    font-size: 20px;
+}
+.abouttable td{
+    border-width: 3px;
+    border-style: outset;
+    padding: 5px 10px;
+}

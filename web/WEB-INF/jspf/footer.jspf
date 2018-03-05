@@ -1,5 +1,5 @@
 <%-- any content can be specified here e.g.: --%>
 <%@ page pageEncoding="UTF-8" %>
-<div class="footer">
-Copyright © 2018 anost.ro
-</div>
+<footer class="footer">
+    <label>Copyright © 2018 - mrgeorge.ro@gmail.com</label>
+</footer>

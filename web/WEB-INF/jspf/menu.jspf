@@ -1,13 +1,29 @@
-<link rel="stylesheet" type="text/css" href="/anost/css/menu.css">
+<br/>
 
-<div style="color: #4A235A; text-align: right">
-    <br/>
-    <p class="app_name">A N O S T</p>
-    <p class="app_description"><b>an</b>other <b>o</b>pen <b>s</b>ource <b>t</b>ool</p>
-    <br/>
-</div>
-<div class="two_line_menu_div">
-<ul class="two_line_menu">
+<table width="100%">
+    <tr>
+        <td style="padding-left: 2%">
+            <c:choose>
+                <c:when test="${fbcurrentuser == null || fbcurrentuser == ''}">
+                    <label><b style="color: #ff0000">FB: not logged in</b></label>
+                </c:when>
+                <c:otherwise>
+                    <label><b style="color: #003366">Logged in FB as <i>${fbcurrentuser}</i></b></label>
+                </c:otherwise>
+            </c:choose>
+        </td>
+        <td class="apptitle">
+            <label id="appname">A N O S T</label>
+            <br/>
+            <label id="appdescription"><b>an</b>other <b>o</b>pen <b>s</b>ource <b>t</b>ool</label>
+        </td>
+    </tr>
+</table>
+
+<br/>
+
+<div class="mainmenu">
+<ul>
     <li>
         <a href="#">HOME</a>
     </li>
@@ -20,7 +36,7 @@
     </li>
     <li>
         <a href="#">MENU 3</a>
-        <ul>
+        <ul><div class="dropdown-content">
             <li><a href="#">Submenu</a></li>
             <li><a href="#">Submenu</a></li>
             <li><a href="#">Submenu</a></li>
@@ -28,7 +44,7 @@
             <li><a href="#">Submenu</a></li>
             <li><a href="#">Submenu</a></li>
             <li><a href="#">Submenu</a></li>
-        </ul>
+            </div></ul>
     </li>
     <li>
         <a href="#">MENU 4</a>
@@ -38,7 +54,7 @@
         </ul>
     </li>
     <li>
-        <a href="#">ABOUT</a>
+        <a href="/anost/about.jsp">ABOUT</a>
     </li>
 </ul>
 </div>
