@@ -23,23 +23,24 @@
  */
 package ro.anost.servlets.fbevents;
 
-import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
-import com.restfb.FacebookClient.AccessToken;
-import com.restfb.Parameter;
-import com.restfb.Version;
-import com.restfb.scope.FacebookPermissions;
-import com.restfb.scope.ScopeBuilder;
+import com.restfb.types.User;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.fb.AccTkn;
+import utils.fb.CreateFbClient;
 
 /**
- *
- * @author George
+ * This servlet processes Facebook login redirect and creates a FacebookClient object
+ * and a User object.
+ * It stores it in session variables along with user FB name and ID.
  */
 public class FbLogin extends HttpServlet {
 
@@ -55,29 +56,43 @@ public class FbLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        ScopeBuilder scopeBuilder = new ScopeBuilder();
-        scopeBuilder.addPermission(FacebookPermissions.EMAIL);
         
-        FacebookClient client = new DefaultFacebookClient(Version.VERSION_2_11);
-        String appId = "1392269750899694";
-        String appSecret = "10c7f2a99320ad4bb60ad879feab9622";
-        String redirectUrl = "http://localhost:8080/anost/";
-        Parameter additionalParameters = Parameter.with("state", "");
-        //https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost&state=
-        String loginDialogUrlString = client.getLoginDialogUrl(appId, redirectUrl, scopeBuilder, additionalParameters);
-
+        try{
+            String verifCode = request.getParameter("code");
+            try{
+                AccTkn accTkn = new AccTkn();
+                accTkn.setFbAccessToken(verifCode);                
+            }catch(NullPointerException ex){
+                System.out.println("Problem getting an access token from Facebook - only known exception is NullPointerException.");
+                Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }catch(NullPointerException ex){
+            System.out.println("Never received Facebook parameter 'code' - only known exception is NullPointerException.");
+            Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try{
+            FacebookClient fbClient = CreateFbClient.getFbClient();  
+            //request.getSession().setAttribute("fbcurrentclient", fbClient);
+            try{
+                User user = fbClient.fetchObject("me", User.class);
+                String currentFbUser = user.getName();
+                request.getSession().setAttribute("fbcurrentuser", currentFbUser);
+                String userId = user.getId();
+                request.getSession().setAttribute("fbcurrentuserid", userId);
+                System.out.println("Logged in FB user "+currentFbUser+"(id "+userId+") from IP "+request.getRemoteAddr()+" at "+LocalDateTime.now());
+            }catch(NullPointerException ex){
+                System.out.println("Could not create an User object. Investigate logs further - only known exception is NullPointerException.");
+                Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }catch(NullPointerException ex){
+            System.out.println("Could not aquire 'fbClient'. Investigate logs further - only known exception is NullPointerException.");
+            Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-//String fbsigninUrl = "https://www.facebook.com/dialog/oauth?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&scope=email&state=";
-//String fbIdConfirmUrl = "https://graph.facebook.com/v2.11/oauth/access_token?client_id=1392269750899694&redirect_uri=http://localhost:8080/anost/fb/events&client_secret=10c7f2a99320ad4bb60ad879feab9622&code=AQCTv7CDpz_jbVOVRTUnlXtusLZLnFvFsWf408mREvWSXt3SAAkvklbAtZqSEB4PFbH4-HlJCH2LROCpEtvgZQ7WOCUWEZ5Eq7So9aN6NdSLOEvCARYWitoNSf4TzB6a7_KSKiBdwI1ubCfkpgmcH8VklddlvWW6Oo9o6eYauBoK2iSNuoVFj2FITuhfv7K-reAqz5qN_3d_3TkfWiK65UhZHc5kSfXE2zY2wFUdEeL7QXLYUPDpvorlrZQ7Ec_0VESAn-QBYkSSdoYhcYiywcvK2_Q_h5-xnFmMDZf02hUxO8O4GngcnCuqBONR0AyQUS0b0AKNHG1gSEQ9sRZQkdYM#_=_";
-        
-        //AccessToken accessToken = client.obtainUserAccessToken(appId, appSecret, redirectUrl, verifCode);
-        //String accTkn = accessToken.getAccessToken();
-        //request.getSession().setAttribute("tok", accTkn);
-        
-        //https://github.com/bchittibabu100/SimpleWebApp
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("./util/login.jsp");
+        request.getSession().setAttribute("fbcurrenttkexp", AccTkn.getTknExpDate());
+        request.getSession().setAttribute("fbcurrenttk", AccTkn.getFbAccessToken());
+        //change something here
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/fb/events/index.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -107,7 +122,7 @@ public class FbLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
@@ -117,7 +132,7 @@ public class FbLogin extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Handles redirect from Facebook user login page and creates a FacebookClient object and a User object.";
     }// </editor-fold>
 
 }
