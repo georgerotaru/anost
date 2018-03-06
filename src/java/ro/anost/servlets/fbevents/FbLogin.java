@@ -24,6 +24,7 @@
 package ro.anost.servlets.fbevents;
 
 import com.restfb.FacebookClient;
+import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.User;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -36,6 +37,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.fb.AccTkn;
 import utils.fb.CreateFbClient;
+import utils.fb.FbAppCredentials;
 
 /**
  * This servlet processes Facebook login redirect and creates a FacebookClient object
@@ -56,7 +58,7 @@ public class FbLogin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/fb/events/index.jsp");
         try{
             String verifCode = request.getParameter("code");
             try{
@@ -81,18 +83,22 @@ public class FbLogin extends HttpServlet {
                 request.getSession().setAttribute("fbcurrentuserid", userId);
                 System.out.println("Logged in FB user "+currentFbUser+"(id "+userId+") from IP "+request.getRemoteAddr()+" at "+LocalDateTime.now());
             }catch(NullPointerException ex){
-                System.out.println("Could not create an User object. Investigate logs further - only known exception is NullPointerException.");
+                System.out.println("Could not create an User object. Investigate logs further.");
                 Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }catch(FacebookOAuthException ex){
+                
             }
         }catch(NullPointerException ex){
             System.out.println("Could not aquire 'fbClient'. Investigate logs further - only known exception is NullPointerException.");
             Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
+            dispatcher.forward(request, response);
         }
         
         request.getSession().setAttribute("fbcurrenttkexp", AccTkn.getTknExpDate());
         request.getSession().setAttribute("fbcurrenttk", AccTkn.getFbAccessToken());
-        //change something here
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/fb/events/index.jsp");
+        
+        AccTkn.resetCredentials();
+        
         dispatcher.forward(request, response);
     }
 

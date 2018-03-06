@@ -55,4 +55,8 @@ public final class AccTkn {
         return tknExpDate;
     }
     
+    public static void resetCredentials(){
+        fbAccessToken = null;
+        tknExpDate = null;
+    }
 }

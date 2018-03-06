@@ -34,7 +34,10 @@ import com.restfb.scope.ScopeBuilder;
 public class FbAppCredentials {
     private final String APPID = "1392269750899694";
     private final String APPSECRET = "";
-    private final String REDIRECTURL = "http://localhost:8080/anost/FbLogin";
+    
+    private final String SERVERADDR = "192.168.102.43";
+    
+    private final String REDIRECTURL = "http://"+SERVERADDR+":8080/anost/FbLogin";
     //private final Parameter ADDITIONALPARAM = Parameter.with("state", "");
     private final ScopeBuilder SCOPEBUILDER = new ScopeBuilder();
     private String loginDialog;
