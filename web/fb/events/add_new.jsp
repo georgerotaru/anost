@@ -29,7 +29,7 @@
                 <table align="center">
                     <tr><td><b><label>INSERT EVENT ID</label></b></td>
                         <td><input type="number" name="fbevents_id" style="width: 300px; text-align: center"></td>
-                        <td><input type="submit" name="fbevents_add" value="GO"</td></tr>
+                        <td><input type="submit" name="fbevents_add" value="GO"></td></tr>
                 </table>
             </form>
             <c:choose>

@@ -8,6 +8,10 @@
         <servlet-name>FbLogin</servlet-name>
         <servlet-class>ro.anost.servlets.fbevents.FbLogin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FbGsearch</servlet-name>
+        <servlet-class>ro.anost.servlets.fbevents.FbGsearch</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FbLogin</servlet-name>
         <url-pattern>/FbLogin</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>FbEventsMain</servlet-name>
         <url-pattern>/FbEventsMain</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FbGsearch</servlet-name>
+        <url-pattern>/FbGsearch</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -116,3 +116,14 @@ footer{
     border-style: outset;
     padding: 5px 10px;
 }
+.tableforfbsearch{
+    margin: auto;
+    border-color: #000000;
+    width: 75%;
+    font-size: 19px;
+    border-collapse: collapse;
+}
+.tableforfbsearch td{
+    border-style: solid;
+    padding-left: 2%;
+}

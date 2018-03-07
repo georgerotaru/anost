@@ -30,8 +30,8 @@
     <li>
         <a href="#">FACEBOOK</a>
         <ul>
+            <li><a href="/anost/fb/gsearch.jsp">Graph Search</a></li>
             <li><a href="/anost/fb/events/index.jsp">Events</a></li>
-            <li><a href="#">Submenu</a></li>
         </ul>
     </li>
     <li>
