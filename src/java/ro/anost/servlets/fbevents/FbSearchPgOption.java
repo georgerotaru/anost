@@ -25,6 +25,7 @@
 package ro.anost.servlets.fbevents;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *
  */
-public class FbGsearch extends HttpServlet {
+public class FbSearchPgOption extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -46,22 +47,12 @@ public class FbGsearch extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url;
-        String gsearchPgGoButton = request.getParameter("gsearchpg_go");
+        String gsearchPgOption = request.getParameter("gsearcgpg_option");
 
-        if (gsearchPgGoButton != null || !"".equals(gsearchPgGoButton)){
-            switch(gsearchPgGoButton){
-                case "1": url = "https://www.facebook.com/search/str/"+request.getParameter("fieldtext1")+"/users-named";
-                        response.sendRedirect(url);
-                        break;
-                case "2": url = "https://www.facebook.com/search/str/"+request.getParameter("fieldtext2")+"/discovery-users";
-                        response.sendRedirect(url);
-                        break;
-                case "3": url = "https://www.facebook.com/search/str/"+request.getParameter("fieldtext3.1")+"/users-named/"+request.getParameter("fieldtext3.2")+"/home-residents/intersect";
-                        response.sendRedirect(url);
-                        break;
-                default: ;
-            }
+        if (gsearchPgOption != null || !"".equals(gsearchPgOption)) {
+            request.setAttribute("gsearcgpgoption", gsearchPgOption);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/gsearch.jsp");
+            dispatcher.forward(request, response);
         }
     } 
 

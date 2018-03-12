@@ -4,7 +4,7 @@
     Author     : George
 --%>
 
-<%@page import="utils.fb.FbAppCredentials"%>
+<%@page import="ro.anost.utils.fb.FbAppCredentials"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -15,12 +15,12 @@
     <body>
         <div class="mainscreen">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
-            <form action="${pageContext.request.contextPath}/FbGsearch" method="GET">
+            <form action="${pageContext.request.contextPath}/FbSearchPgOption" method="GET">
                 <%--page options--%>
                 <table class="noboredcentertable">
                     <tr>
-                        <td><input type="submit" name="gsearcgpg_input" class="submenu" value="People ~ Pages"></td>
-                        <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Photos"></td>
+                        <td><input type="submit" name="gsearcgpg_option" class="submenu" value="People"></td>
+                        <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Photos"></td>
                     </tr>
                 </table>
             </form>
@@ -36,36 +36,61 @@
                 </div>
             </c:if>
             <br/>
-            <c:choose>
-                <c:when test="${gsearcgpg == 'People ~ Pages'}">
-                    <form action="${pageContext.request.contextPath}/FbGsearch" method="GET" target="_blank">
-                        <table class="tableforfbsearch" style="border-style: solid">
-                            <tr>
-                                <td>
-                                    <dl>
-                                        <dt><b>People named <i style="color: #990000">name</i></b></dt>
-                                        <dd>https://www.facebook.com/search/str/<input type="text" name="gsearchpp" style="width: 150px; text-align: center; color: #990000" placeholder="name">/users-named<a target="_blank"></dd>
-                                    </dl>                
-                                </td>
-                                <td><input type="submit" name="gsearchpg_go" value="GO"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <dl>
-                                        <dt><b>Users named <i style="color: #990000">name</i></b></dt>
-                                        <dd>https://www.facebook.com/search/str/<input type="text" name="gsearchpp" style="width: 150px; text-align: center; color: #990000" placeholder="name">/discovery-users<a target="_blank"></dd>
-                                    </dl>                
-                                </td>
-                                <td><input type="submit" name="gsearchpg_go" value="GO"></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <c:set var="test" value=""/>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </c:when>
-            </c:choose>
+            <div class="searchpage">
+                <c:choose>
+                    <c:when test="${gsearcgpgoption == 'People'}">
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset>
+                                <legend><b>People named "<i style="color: #990000">name</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext1" placeholder="name" style="color: #990000"/>/users-named
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="gsearchpg_go" value="1">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset>
+                                <legend><b>Users named "<i style="color: #990000">name</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext2" placeholder="name" style="color: #990000"/>/discovery-users
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="gsearchpg_go" value="2">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset>
+                                <legend><b>People from "<i style="color: #339966">town</i>" named "<i style="color: #990000">name</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext3.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="fieldtext3.2" placeholder="city id" style="color: #339966"/>/home-residents/intersect
+                                        </td>
+                                        <td>
+                                            <button type="submit" name="gsearchpg_go" value="3">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </c:when>
+                </c:choose>
+            </div>
+            <br/>
+        </div>
+        <%@include file="/WEB-INF/jspf/footer.jspf" %>
     </body>
 </html>

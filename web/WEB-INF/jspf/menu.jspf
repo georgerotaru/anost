@@ -13,8 +13,7 @@
             </c:choose>
         </td>
         <td class="apptitle">
-            <label id="appname">A N O S T</label>
-            <br/>
+            <label id="appname">A N O S T</label><br/>
             <label id="appdescription"><b>an</b>other <b>o</b>pen <b>s</b>ource <b>t</b>ool</label>
         </td>
     </tr>

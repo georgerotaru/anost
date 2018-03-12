@@ -35,9 +35,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.fb.AccTkn;
-import utils.fb.CreateFbClient;
-import utils.fb.FbAppCredentials;
+import ro.anost.utils.fb.AccTkn;
+import ro.anost.utils.fb.CreateFbClient;
 
 /**
  * This servlet processes Facebook login redirect and creates a FacebookClient object

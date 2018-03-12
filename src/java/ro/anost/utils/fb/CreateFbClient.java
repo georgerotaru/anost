@@ -21,42 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package utils.fb;
+package ro.anost.utils.fb;
 
-import com.restfb.FacebookClient.AccessToken;
-import java.util.Date;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Version;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  */
-public final class AccTkn {
-    private static String fbAccessToken;
-    private String verifCode;
-    private static Date tknExpDate;
+public class CreateFbClient {
+    static FacebookClient client;
+    static FacebookClient fbClient;
 
-    public void setFbAccessToken(String verifCode) {
-        FbAppCredentials fbAppCredentials = new FbAppCredentials();
+    public static FacebookClient getClient() {
+        client = new DefaultFacebookClient(Version.VERSION_2_11);
+        return client;
+    }
+
+    public static FacebookClient getFbClient() {
         try{
-            AccessToken accessToken = CreateFbClient.getClient().obtainUserAccessToken(fbAppCredentials.getAPPID(), fbAppCredentials.getAPPSECRET(), fbAppCredentials.getREDIRECTURL(), verifCode);
-            fbAccessToken = accessToken.getAccessToken();
-            long mili = accessToken.getExpires().getTime();
-            tknExpDate = new Date(mili);
+            fbClient = new DefaultFacebookClient(AccTkn.getFbAccessToken(), Version.VERSION_2_11);            
         }catch(NullPointerException ex){
-            System.out.println("Error creating access token object");
-            System.out.println("Access token is "+fbAccessToken);
+            System.out.println("Problem creating fbClient object. Most probably no access token aquired.");
+            Logger.getLogger(CreateFbClient.class.getName()).log(Level.SEVERE, null, ex);   
         }
-    }
-
-    public static String getFbAccessToken() {
-        return fbAccessToken;
-    }
-
-    public static Date getTknExpDate() {
-        return tknExpDate;
+        return fbClient;
     }
     
-    public static void resetCredentials(){
-        fbAccessToken = null;
-        tknExpDate = null;
-    }
 }
