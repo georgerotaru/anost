@@ -195,6 +195,11 @@ public class FbEventsMain extends HttpServlet {
                         ppstm.setString(14, eventDetails.get(4));
                         ppstm.setString(15, eventDetails.get(5));
                         ppstm.executeUpdate();
+                        
+                        /*query = "INSERT INTO FB_EVENT_REPORTSTATUS(EVENT_ID) VALUES(?)";
+                        ppstm = connection.prepareStatement(query);
+                        ppstm.setString(1, eventId);
+                        ppstm.executeUpdate();*/
 
                         for (Entry<String, String> entry : eventAdminList.entrySet()){
                             String key = entry.getKey();

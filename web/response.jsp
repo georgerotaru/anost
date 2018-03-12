@@ -13,10 +13,10 @@
         <title>response</title>
     </head>
     <body>
-        <jsp:useBean id="mybean" scope="page" class="ro.anost.utils.fb.FbSearch" />
+        <%--<jsp:useBean id="mybean" scope="page" class="ro.anost.utils.fb.FbSearch" />
         <jsp:setProperty name="mybean" property="name" />
         <h1>Hello, <jsp:getProperty name="mybean" property="name" />!</h1>
         ${mybean.fbName}
-        <c:redirect url="https://www.facebook.com/search/str/${mybean.fbName}/users-named"/>
+        <c:redirect url="https://www.facebook.com/search/str/${mybean.fbName}/users-named"/>--%>
     </body>
 </html>
