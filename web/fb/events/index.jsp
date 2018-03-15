@@ -19,23 +19,25 @@
                 <%--page options--%>
                 <table class="noboredcentertable">
                     <tr>
-                        <td><input type="submit" class="submenu" name="fbevents_add" value="Add new event"></a></td>
+                        <td><input type="submit" class="submenu" name="fbevents_add" value="Add new event"></td>
                         <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                     </tr>
                 </table>
             </form>
             <br/>
-            <b>${message}</b>
             <c:if test="${fbcurrentuser == null || fbcurrentuser == ''}">
-                <c:if test="${login == true}">
+                <c:if test="${login == false}">
                     <br/>
                     <div class="customSocialBtn">
-                        <p style="font-size: 17px">Please click the button bellow to login using your Facebook account</p>
+                        <p style="font-size: 17px">To add an event, please click the button bellow to login using your Facebook account</p>
                         <a href="${fbauthurl}"><button id="facebookbutton">Sign in with Facebook</button></a><br/>
                     </div>
                 </c:if>
             </c:if>
+            <div style="text-align: center; color: #ff0000">
+                <b>${message}</b>
+            </div>
             <br/>
         </div>
         <%@include file="/WEB-INF/jspf/footer.jspf" %>

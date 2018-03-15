@@ -23,7 +23,7 @@
             url="jdbc:derby://localhost:1527/anost_db;create=true"/>
         <%--set db request for user details--%>
         <sql:query dataSource="${myDB}" var="userdetails">
-            SELECT USER_DISPLAY_NAME, USERURL FROM FB_USER_IDENTITY WHERE USER_ID='<c:out value="${adminId}"/>'
+            SELECT USER_DISPLAY_NAME, USER_URL FROM FB_USER_IDENTITY WHERE USER_ID='<c:out value="${adminId}"/>'
         </sql:query>
         <sql:query dataSource="${myDB}" var="admin4events">
             SELECT FB_EVENT_DETAILS.EVENT_ID, FB_EVENT_DETAILS.NAME, FB_EVENT_DETAILS.CITY, FB_EVENT_DETAILS.PLACE, FB_EVENT_DETAILS.ATTENDING_COUNT, FB_EVENT_DETAILS.START_DATE, FB_EVENT_DETAILS.END_DATE FROM FB_EVENT_DETAILS JOIN FB_EVENT_ADMINS ON FB_EVENT_DETAILS.EVENT_ID=FB_EVENT_ADMINS.EVENT_ID WHERE FB_EVENT_ADMINS.USER_ID='<c:out value="${adminId}"/>' ORDER BY START_DATE DESC
@@ -34,21 +34,21 @@
                 <%--page options--%>
                 <table class="noboredcentertable">
                     <tr>
-                        <td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="submenu" value="Add new event"></a></td>
+                        <td><input type="submit" class="submenu" name="fbevents_add" value="Add new event"></td>
                         <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                     </tr>
                 </table>
             </form>
             <br/>
-            <table class="noboredcentertable" width="85%">
+            <table class="noboredcentertable" width="95%">
                 <tr><td width="60%" style="border-style: none">
                         <table class="intabledetails">
                             <tr>
                                 <td><b><label style="font-size: 20px">Admin name</label></b></td>
                                 <td style="text-align: left">
                                     <c:forEach var="userRow" items="${userdetails.rows}">
-                                        <a href="${userRow.USERURL}" target="_blank" title="User Facebook Page" style="font-size: 20px"><c:out value="${userRow.USER_DISPLAY_NAME}"/></a>
+                                        <a href="${userRow.USER_URL}" target="_blank" title="User Facebook Page" style="font-size: 20px"><c:out value="${userRow.USER_DISPLAY_NAME}"/></a>
                                     </c:forEach>
                                 </td>
                             </tr>
@@ -112,16 +112,15 @@
                                             </table>
                                             <br/>
                                         </form>                                    
-                                        <%--<form name="userdetails" action="${pageContext.request.contextPath}/FbUsersMain">
-                                            <input type="hidden" name="detailspg_admin" value="${adminrow.USER_ID}">
-                                        </form>--%>
                                     </c:forEach>
                             </td></tr>
                         </table>
                     </td>
                     <td style="text-align: center; vertical-align: top" width="40%"><b><label>USER PICTURE</label></b><br/>
                         <br/>
-                        <img src="" width="350" height="350" alt="facebook profile image of user"/>
+                        <img src="${adminPictureUrl}" width="350" height="350" alt="facebook profile image of user"/>
+                        <br/>
+                        ${message}
                     </td>
                 </tr>
             </table>

@@ -35,7 +35,7 @@
                 <%--page options--%>
                 <table class="noboredcentertable">
                     <tr>
-                        <td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="submenu" value="Add new event"></a></td>
+                        <td><input type="submit" class="submenu" name="fbevents_add" value="Add new event"></td>
                         <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_update" value="Update"></td>   
@@ -50,7 +50,7 @@
                             <td><img src="/anost/util/pictures/new2.png" width="30" height="30" alt="picture in which the word new apears on red background"/></td>
                             <td>
                                 <select name="COpReport">
-                                    <option>COp</option>
+                                    <option value="">COp</option>
                                     <option value="SENT">YES</option>
                                     <option value="NOT_SENT">NO</option>
                                 </select>                                

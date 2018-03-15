@@ -28,6 +28,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import com.restfb.exception.FacebookGraphException;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.Event;
 import java.sql.Connection;
@@ -71,7 +72,7 @@ public class AddEventDetails {
                 Boolean resultSetHasRows = resultSet.next();
                 if (resultSetHasRows) {
                     String eventName = resultSet.getString("NAME");
-                    this.message = "<div style=\"color: #FF0000\">Event <i>"+eventName+"</i> already in database!</div>";
+                    this.message = "Event <i>"+eventName+"</i> already in database!";
                 } else {
                     try{
                         Event eventSearch = fbClient.fetchObject(eventId, Event.class);
@@ -208,14 +209,22 @@ public class AddEventDetails {
                             }
                         }
                         
+                        query = "INSERT INTO FB_EVENT_REPORTSTATUS(EVENT_ID) VALUES(?)";
+                        ppstm = connection.prepareStatement(query);
+                        ppstm.setString(1, eventId);
+                        ppstm.executeUpdate();
+                        
                         connection.commit();
+                        System.out.println("Event "+eventId+" added to database.");
                         connection.setAutoCommit(true);
-                    } catch (FacebookOAuthException | SQLException ex) {
-                        System.out.println("Could not connect event object or insert event or admin details.");
-                        this.message = "Could not connect event object or insert event or admin details.";
+                        JDBCConnectionManager.closeJDBCConnection();
+                    } catch (FacebookGraphException | SQLException ex) {
+                        System.out.println("Could not connect event object or insert event or admin details. Most common problems are that event ID is wrong or the user does not have the credentials to see it. EVENT ID used: "+eventId);
+                        this.message = "The event with ID <i>"+eventId+"</i> could not be found.<br/>Make sure the event ID is correct, it was not deleted from Facebook or you have the credentials to acccess it!";
                         Logger.getLogger(AddEventDetails.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                JDBCConnectionManager.closeJDBCConnection();
             } catch (SQLException ex) {
                 System.out.println("Could not query database for event id.");
                 this.message = "Could not query database for event id.";
@@ -223,7 +232,7 @@ public class AddEventDetails {
             }
         } catch (FacebookOAuthException ex) {
             System.out.println("Could not create fbClient Object. Check API version or access token.");
-            this.message = "Could not create fbClient Object. Check API version or access token.";
+            this.message = "Could not connect with Facebook. If problem persists, please contact the administrator.";
             Logger.getLogger(AddEventDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

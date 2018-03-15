@@ -40,7 +40,7 @@
                 <%--page options--%>
                 <table class="noboredcentertable">
                     <tr>
-                        <td><a href="/anost/fb/events/add_new.jsp"><input type="button" class="submenu" value="Add new event"></a></td>
+                        <td><input type="submit" class="submenu" name="fbevents_add" value="Add new event"></td>
                         <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                     </tr>
@@ -81,7 +81,7 @@
                             <tr><td style="vertical-align: top"><b><img src="/anost/util/pictures/new2.png" width="25" height="20" alt="picture in which the word new apears on red background"/><label>Event created by</label></b></td>
                                 <%--display event admins from db--%>
                                 <td>
-                                    <form name="Admins for this event" method="GET" action="${pageContext.request.contextPath}/FbUsersMain">
+                                    <form name="Admins for this event" method="GET" action="${pageContext.request.contextPath}/FbEventsMain">
                                         <table width="100%" class="nostyle">
                                             <c:forEach var="adminrow" items="${admins.rows}">
                                                 <tr><td><button type="submit"  title="click for details" name="detailspg_admin" value="${adminrow.USER_ID}">${adminrow.USER_DISPLAY_NAME}</button></td></tr>
