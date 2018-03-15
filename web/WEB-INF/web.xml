@@ -16,6 +16,10 @@
         <servlet-name>FbSearchPgOption</servlet-name>
         <servlet-class>ro.anost.servlets.fbevents.FbSearchPgOption</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FbUsersMain</servlet-name>
+        <servlet-class>ro.anost.servlets.fbevents.FbUsersMain</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>FbLogin</servlet-name>
         <url-pattern>/FbLogin</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>FbSearchPgOption</servlet-name>
         <url-pattern>/FbSearchPgOption</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FbUsersMain</servlet-name>
+        <url-pattern>/FbUsersMain</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -21,13 +21,17 @@
             user="anost"
             password="anost"
             url="jdbc:derby://localhost:1527/anost_db;create=true"/>
+        
         <%--set db request for event details--%>
         <sql:query dataSource="${myDB}" var="event">
             SELECT * FROM FB_EVENT_DETAILS WHERE EVENT_ID='<c:out value="${eventID}"/>'
         </sql:query>
+        <sql:query dataSource="${myDB}" var="copReports">
+            SELECT REPORT_STATUS, LAST_UPDATE FROM FB_EVENT_REPORTSTATUS WHERE EVENT_ID='${eventID}'
+        </sql:query>
         <%--set db request for admin details--%>
         <sql:query dataSource="${myDB}" var="admins">
-            SELECT FB_USER_IDENTITY.USER_DISPLAY_NAME FROM FB_USER_IDENTITY JOIN FB_EVENT_ADMINS ON FB_EVENT_ADMINS.USER_ID=FB_USER_IDENTITY.USER_ID WHERE FB_EVENT_ADMINS.EVENT_ID ='<c:out value="${eventID}"/>'
+            SELECT FB_USER_IDENTITY.USER_DISPLAY_NAME, FB_USER_IDENTITY.USER_ID FROM FB_USER_IDENTITY JOIN FB_EVENT_ADMINS ON FB_EVENT_ADMINS.USER_ID=FB_USER_IDENTITY.USER_ID WHERE FB_EVENT_ADMINS.EVENT_ID ='<c:out value="${eventID}"/>'
         </sql:query>
         
         <div class="mainscreen">
@@ -74,15 +78,32 @@
                             <tr><td></td></tr>
                             <tr><td><b><label>Last details update</label></b></td><td><fmt:formatDate pattern = "dd.MM.yyyy HH:mm" value="${row.LAST_UPDATE}"/></td></tr>
                             <tr><td></td></tr>
-                            <tr><td style="vertical-align: top"><b><label>Event created by</label></b></td>
+                            <tr><td style="vertical-align: top"><b><img src="/anost/util/pictures/new2.png" width="25" height="20" alt="picture in which the word new apears on red background"/><label>Event created by</label></b></td>
                                 <%--display event admins from db--%>
                                 <td>
-                                    <table width="100%">
-                                        <c:forEach var="adminrow" items="${admins.rows}">
-                                            <tr><td style="text-align: center"><c:out value="${adminrow.USER_DISPLAY_NAME}"/></td></tr>
-                                        </c:forEach>
-                                    </table>
+                                    <form name="Admins for this event" method="GET" action="${pageContext.request.contextPath}/FbUsersMain">
+                                        <table width="100%" class="nostyle">
+                                            <c:forEach var="adminrow" items="${admins.rows}">
+                                                <tr><td><button type="submit"  title="click for details" name="detailspg_admin" value="${adminrow.USER_ID}">${adminrow.USER_DISPLAY_NAME}</button></td></tr>
+                                            </c:forEach>
+                                        </table>
+                                    </form>
                                 </td></tr>
+                            <tr><td></td></tr>
+                            <tr><td><b><label>Report date</label></b></td>
+                                <td>
+                                    <c:forEach var="statusrow" items="${copReports.rows}">
+                                        <c:choose>
+                                            <c:when test="${statusrow.REPORT_STATUS == 'SENT'}">
+                                                <fmt:formatDate pattern = "dd.MM.yyyy" value="${statusrow.LAST_UPDATE}"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                not reported
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </td>
+                            </tr>
                         </table>
                     </td>
                     <td style="text-align: center; border-style: none;" width="40%"><b><label>EVENT DESCRIPTION</label></b><br/>

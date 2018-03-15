@@ -69,3 +69,11 @@ outline: inherit;
 .submenu:focus{
     outline: 0;
 }
+.copreport{
+    padding-left: 1%;
+}
+.copreport select{
+    background: transparent;
+    font-weight: bold;
+    display: block
+}

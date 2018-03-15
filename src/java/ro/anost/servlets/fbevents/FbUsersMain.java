@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2018 George.
+ * Copyright 2018 admin.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,18 @@
  */
 package ro.anost.servlets.fbevents;
 
-import com.restfb.FacebookClient;
-import com.restfb.exception.FacebookOAuthException;
-import com.restfb.types.User;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ro.anost.utils.fb.AccTkn;
-import ro.anost.utils.fb.CreateFbClient;
 
 /**
- * This servlet processes Facebook login redirect and creates a FacebookClient object
- * and a User object.
- * It stores it in session variables along with user FB name and ID.
+ *
+ * @author admin
  */
-public class FbLogin extends HttpServlet {
+public class FbUsersMain extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,48 +47,7 @@ public class FbLogin extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/fb/events/index.jsp");
-        try{
-            String verifCode = request.getParameter("code");
-            try{
-                AccTkn accTkn = new AccTkn();
-                accTkn.setFbAccessToken(verifCode);                
-            }catch(NullPointerException ex){
-                System.out.println("Problem getting an access token from Facebook - only known exception is NullPointerException.");
-                Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }catch(NullPointerException ex){
-            System.out.println("Never received Facebook parameter 'code' - only known exception is NullPointerException.");
-            Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try{
-            FacebookClient fbClient = CreateFbClient.getFbClient();  
-            //request.getSession().setAttribute("fbcurrentclient", fbClient);
-            try{
-                User user = fbClient.fetchObject("me", User.class);
-                String currentFbUser = user.getName();
-                request.getSession().setAttribute("fbcurrentuser", currentFbUser);
-                String userId = user.getId();
-                request.getSession().setAttribute("fbcurrentuserid", userId);
-                System.out.println("Logged in FB user "+currentFbUser+"(id "+userId+") from IP "+request.getRemoteAddr()+" at "+LocalDateTime.now());
-            }catch(NullPointerException ex){
-                System.out.println("Could not create an User object. Investigate logs further.");
-                Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
-            }catch(FacebookOAuthException ex){
-                
-            }
-        }catch(NullPointerException ex){
-            System.out.println("Could not aquire 'fbClient'. Investigate logs further - only known exception is NullPointerException.");
-            Logger.getLogger(FbLogin.class.getName()).log(Level.SEVERE, null, ex);
-            dispatcher.forward(request, response);
-        }
-        
-        request.getSession().setAttribute("fbcurrenttkexp", AccTkn.getTknExpDate());
-        request.getSession().setAttribute("fbcurrenttk", AccTkn.getFbAccessToken());
-        
-        AccTkn.resetCredentials();
-        
-        dispatcher.forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -136,7 +86,7 @@ public class FbLogin extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Handles redirect from Facebook user login page and creates a FacebookClient object and a User object.";
+        return "Short description";
     }// </editor-fold>
 
 }

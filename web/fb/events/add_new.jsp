@@ -24,22 +24,19 @@
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                         <td><input type="reset" class="submenu" value="Cancel"></td></tr>
                 </table>
-                <br/>
-                <%--display insert form--%>
-                <table align="center">
-                    <tr><td><b><label>INSERT EVENT ID</label></b></td>
-                        <td><input type="number" name="fbevents_id" style="width: 300px; text-align: center"></td>
-                        <td><input type="submit" name="fbevents_add" value="GO"></td></tr>
-                </table>
-            </form>
-            <c:choose>
-                <c:when test="${inDB == true}">
-                    <br/>
-                    <div style="text-align: center">
-                        ${message}
-                    </div>
-                </c:when>
-            </c:choose>
+
+            <br/>
+                <b>${message}</b>
+            <br/>
+            <c:if test="${fbcurrentuser != null || fbcurrentuser != ''}">
+
+                    <table align="center">
+                        <tr><td><b><label>INSERT EVENT ID</label></b></td>
+                            <td><input type="number" name="fbeventadd_id" style="width: 300px; text-align: center"></td>
+                            <td><input type="submit" name="fbeventsadd_go" value="GO"></td></tr>
+                    </table>
+                </form>
+            </c:if>
         <br/>
         </div>
         <%@include file="/WEB-INF/jspf/footer.jspf" %>

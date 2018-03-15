@@ -23,25 +23,8 @@
  */
 package ro.anost.servlets.fbevents;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.Version;
-import com.restfb.exception.FacebookGraphException;
-import com.restfb.types.Event;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -49,7 +32,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ro.anost.jdbcconn.JDBCConnectionManager;
+import ro.anost.utils.fb.AddEventDetails;
+import ro.anost.utils.fb.FbAppCredentials;
 
 /**
  *
@@ -69,18 +53,46 @@ public class FbEventsMain extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException {
-        response.setContentType("text/html;charset=UTF-8");
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-        PreparedStatement ppstm = null;
+        //Connection connection = null;
+        //Statement statement = null;
+        //ResultSet resultSet = null;
+        //PreparedStatement ppstm = null;
+        
+        String currentFbUser = (String) request.getSession().getAttribute("fbcurrentuser");
         String accTkn = (String) request.getSession().getAttribute("fbcurrenttk");
-        try { 
+        
+        if (request.getParameter("fbevents_add") != null){
+            if (currentFbUser == null || "".equals(currentFbUser)){
+                request.setAttribute("message", "<div style=\"color: #FF0000; text-align: center\">Please login with your Facebook account!</div>");
+                FbAppCredentials fbAppCredentials = new FbAppCredentials();
+                request.setAttribute("fbauthurl", fbAppCredentials.getLoginDialog());
+                request.setAttribute("login", true);
+                //request.setAttribute("fbevents_add", null);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                dispatcher.forward(request, response);
+            } else {
+               response.sendRedirect("./fb/events/add_new.jsp");
+            }
+        }else if (request.getParameter("fbeventsadd_go") != null){
+            String fbEventId = request.getParameter("fbeventadd_id");
+            if (fbEventId == null || "".equals(fbEventId)) {
+                System.out.println("User "+currentFbUser+" tried to implement an event with no ID!");
+                request.setAttribute("message", "<div style=\"color: #FF0000; text-align: center\">No event ID was introduced. Please try again!</div>");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
+                dispatcher.forward(request, response);
+            } else {
+                AddEventDetails addEvent = new AddEventDetails(fbEventId, accTkn);
+                request.setAttribute("message", addEvent.getMessage());
+                RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/add_new.jsp");
+                dispatcher.forward(request, response);
+            }
+        }
+        /*try { 
             connection = JDBCConnectionManager.getJDBCConnection();
             statement = connection.createStatement();
             FacebookClient client = new DefaultFacebookClient(Version.VERSION_2_11);
             FacebookClient fbClient = new DefaultFacebookClient(accTkn, Version.VERSION_2_11);
-            if (request.getParameter("fbevents_add") != null) {
+            if (request.getParameter("fbevents_add") != null || !"".equals(request.getParameter("fbevents_add"))) {
                 String eventId = request.getParameter("fbevents_id");
                 String query = "SELECT EVENT_ID, NAME FROM FB_EVENT_DETAILS WHERE EVENT_ID='"+eventId+"'";
                 resultSet = statement.executeQuery(query);
@@ -195,11 +207,6 @@ public class FbEventsMain extends HttpServlet {
                         ppstm.setString(14, eventDetails.get(4));
                         ppstm.setString(15, eventDetails.get(5));
                         ppstm.executeUpdate();
-                        
-                        /*query = "INSERT INTO FB_EVENT_REPORTSTATUS(EVENT_ID) VALUES(?)";
-                        ppstm = connection.prepareStatement(query);
-                        ppstm.setString(1, eventId);
-                        ppstm.executeUpdate();*/
 
                         for (Entry<String, String> entry : eventAdminList.entrySet()){
                             String key = entry.getKey();
@@ -252,7 +259,7 @@ public class FbEventsMain extends HttpServlet {
                 request.setAttribute("queryDB", "SELECT EVENT_ID, NAME, CITY, PLACE, ATTENDING_COUNT, INTERESTED_COUNT, START_DATE, START_TIME, END_DATE, END_TIME, LAST_UPDATE, URL FROM FB_EVENT_DETAILS WHERE (START_DATE >= CURRENT_DATE) or (END_DATE >= CURRENT_DATE) ORDER BY START_DATE ASC, ATTENDING_COUNT DESC");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/display_events.jsp");
                 dispatcher.forward(request, response);
-            } else if ("Delete".equals(request.getParameter("fbevents_delete"))) {
+            /*} else if ("Delete".equals(request.getParameter("fbevents_delete"))) {
                 String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
                 if (selectedCheckboxes != null) {
                     String query = "DELETE FROM FB_EVENT_DETAILS WHERE EVENT_ID=?";
@@ -278,6 +285,33 @@ public class FbEventsMain extends HttpServlet {
                 request.setAttribute("eventID", request.getParameter("event_details"));
                 RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/details.jsp");
                 dispatcher.forward(request, response);
+            }else if (request.getParameter("fbevents_copreport") != null) {
+                String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
+                String copOption = request.getParameter("COpReport");
+                if (!"COp".equals(copOption) && selectedCheckboxes != null) {
+                    String query = "UPDATE FB_EVENT_REPORTSTATUS SET REPORT_STATUS=?, LAST_UPDATE=? WHERE EVENT_ID=?";
+                    ppstm = connection.prepareStatement(query);
+                    connection.setAutoCommit(false);
+                    for(String parseEvents : selectedCheckboxes){
+                        java.util.Date nowDateJava = new java.util.Date();
+                        ppstm = connection.prepareStatement(query);
+                        ppstm.setString(1, copOption);
+                        ppstm.setTimestamp(2, new java.sql.Timestamp(nowDateJava.getTime()));
+                        ppstm.setString(3, parseEvents);
+                        ppstm.executeUpdate();
+                    }
+                    connection.commit();
+                    connection.setAutoCommit(true);
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "Event(s) marked as being "+copOption+" for COp!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                } else {
+                    request.setAttribute("inDB", true);
+                    request.setAttribute("message", "Wrong selection! Please be sure to check an event and select YES or NO option!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
+                    dispatcher.forward(request, response);
+                }
              } else if (request.getParameter("fbevents_update") != null) {
                 String[] selectedCheckboxes = request.getParameterValues("events_checkbox");
                 if (selectedCheckboxes != null) {
@@ -397,6 +431,11 @@ public class FbEventsMain extends HttpServlet {
                     RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/events/index.jsp");
                     dispatcher.forward(request, response);
                 }
+            }else if (request.getParameter("detailspg_admin") != null) {
+            String eventAdminId = request.getParameter("detailspg_admin");
+            request.setAttribute("adminId", eventAdminId);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("./fb/users/event_admins.jsp");
+            dispatcher.forward(request, response);
             }
         } catch(SQLException ex){
             Logger.getLogger(FbEventsMain.class.getName()).log(Level.SEVERE, null, ex);           
@@ -414,7 +453,7 @@ public class FbEventsMain extends HttpServlet {
             dispatcher.forward(request, response);
         }finally{
             JDBCConnectionManager.closeJDBCConnection();
-        }
+        }*/
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

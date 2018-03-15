@@ -12,11 +12,6 @@
         <title>Test</title>
     </head>
     <body>
-        <h1>Entry form</h1>
-        <form name="Name Input Form" action="response.jsp" method="GET" target="_blank">
-            Enter your name:
-            <input type="text" name="name" value="" />
-            <input type="submit" value="OK" />
-        </form>
+        <h1>Hello world!</h1>
     </body>
 </html>

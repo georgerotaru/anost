@@ -29,7 +29,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,16 +40,16 @@ public class JDBCConnectionManager {
     private static ResultSet resultSet = null;
     private static PreparedStatement ppstm = null;
     private static Connection connection = null;
-    private static String sqlUser = "anost";
-    private static String sqlPasswd = "anost";
-    private static String sqlUrl = "jdbc:derby://localhost:1527/anost_db;create=true";
-    private static String driver = "org.apache.derby.jdbc.ClientDriver";
+    private static final String SQLUSER = "anost";
+    private static final String SQLPASSWD = "anost";
+    private static final String SQLURL = "jdbc:derby://localhost:1527/anost_db;create=true";
+    private static final String SQLDRIVER = "org.apache.derby.jdbc.ClientDriver";
     
     public static Connection getJDBCConnection(){
         try{
-            Class driverClass = Class.forName(driver);
+            Class driverClass = Class.forName(SQLDRIVER);
             try{
-                connection = DriverManager.getConnection(sqlUrl, sqlUser, sqlPasswd);                
+                connection = DriverManager.getConnection(SQLURL, SQLUSER, SQLPASSWD);                
             }catch(SQLException ex){
                 System.out.println("Failed to establish database connection.");
                 java.util.logging.Logger.getLogger(JDBCConnectionManager.class.getName()).log(Level.SEVERE, null, ex); 

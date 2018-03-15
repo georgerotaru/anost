@@ -15,8 +15,6 @@
         <%@include file="/WEB-INF/jspf/header.jspf" %>
     </head>
     <body>
-        <%-- returns the current action URL without the base URL and query strings 
-        ${requestScope['javax.servlet.forward.request_uri']} --%>
         <%--set db credentials--%>
         <sql:setDataSource
             var="myDB"
@@ -41,10 +39,28 @@
                         <td><input type="submit" class="submenu" name="fbevents_ongoing" value="Display ongoing events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_all" value="Display events"></td>
                         <td><input type="submit" class="submenu" name="fbevents_update" value="Update"></td>   
-                        <td><input type="submit" class="submenu" name="fbevents_delete" value="Delete"></td>
+                        <%--<td><input type="submit" class="submenu" name="fbevents_delete" value="Delete"></td>--%>
                         <td><input type="reset" class="submenu" value="Cancel"></td>
                     </tr>
                 </table>
+                <br/>
+                <div class="copreport">
+                    <table>
+                        <tr>
+                            <td><img src="/anost/util/pictures/new2.png" width="30" height="30" alt="picture in which the word new apears on red background"/></td>
+                            <td>
+                                <select name="COpReport">
+                                    <option>COp</option>
+                                    <option value="SENT">YES</option>
+                                    <option value="NOT_SENT">NO</option>
+                                </select>                                
+                            </td>
+                            <td>
+                                <input type="submit" value="SET" name="fbevents_copreport" />                               
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <br/>
                 <%--display events--%>
                 <table class="tableforlistings">
@@ -52,7 +68,17 @@
                     <c:forEach var="row" items="${events.rows}">
                         <tr>
                             <td ><input type="checkbox" name="events_checkbox" value="${row.EVENT_ID}"></td>
-                            <td class="nostyle" style="padding-right: 5px"><button name="event_details" type="submit" title="click for details" value="${row.EVENT_ID}"><c:out value="${row.NAME}"/></button></td>
+                            <td class="nostyle" style="padding-right: 5px">
+                                <sql:query dataSource="${myDB}" var="copReports">
+                                    SELECT REPORT_STATUS FROM FB_EVENT_REPORTSTATUS WHERE EVENT_ID='${row.EVENT_ID}'
+                                </sql:query>
+                                <c:forEach var="statusrow" items="${copReports.rows}">
+                                    <c:if test="${statusrow.REPORT_STATUS == 'SENT'}">
+                                        <img src="/anost/util/pictures/check1.png" width="17" height="17" alt="image of a check mark meaning that this event was reported"/>
+                                    </c:if>
+                                </c:forEach>
+                                <button name="event_details" type="submit" title="click for details" value="${row.EVENT_ID}"><c:out value="${row.NAME}"/></button>
+                            </td>
                             <td style="padding-left: 5px"><c:out value="${row.CITY}"/></td>
                             <td><c:out value="${row.PLACE}"/></td>
                             <td style="padding-right: 5px"><c:out value="${row.ATTENDING_COUNT}"/></td>
