@@ -167,10 +167,12 @@ public class UpdateEventDetails {
                 System.out.println("Event(s) update failed. Please check logs.");
                 this.message = "Event(s) update failed. If problem persists, please contact the administrator.";
                 Logger.getLogger(UpdateEventDetails.class.getName()).log(Level.SEVERE, null, ex);
+                JDBCConnectionManager.closeJDBCConnection();
             } catch (FacebookGraphException ex) {
                 System.out.println("Could not update event details. Most common problems are that event was deleted, the user does not have the credentials to see it or is not logged in with his Facebook account.");
                 this.message = "The event(s) could not be updated.<br/>Make sure you are logged in with your Facebook or if the event was not deleted from Facebook or if you have the credentials to acccess it!";
                 Logger.getLogger(AddEventDetails.class.getName()).log(Level.SEVERE, null, ex);
+                JDBCConnectionManager.closeJDBCConnection();
             }
         }catch(FacebookOAuthException ex){
             System.out.println("Could not create fbClient Object. Check API version or access token.");

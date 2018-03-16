@@ -116,9 +116,9 @@
                             </td></tr>
                         </table>
                     </td>
-                    <td style="text-align: center; vertical-align: top" width="40%"><b><label>USER PICTURE</label></b><br/>
+                    <td style="text-align: center; vertical-align: top" width="40%"><b><label>USER PROFILE PICTURE</label></b><br/>
                         <br/>
-                        <img src="${adminPictureUrl}" width="350" height="350" alt="facebook profile image of user"/>
+                        <img src="https://graph.facebook.com/${adminId}/picture?height=500" width="350" height="350" alt="facebook profile image of user"/>
                         <br/>
                         ${message}
                     </td>

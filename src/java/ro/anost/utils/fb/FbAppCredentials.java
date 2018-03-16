@@ -35,7 +35,7 @@ public class FbAppCredentials {
     private final String APPID = "1392269750899694";
     private final String APPSECRET = "";
     
-    private final String SERVERADDR = "";
+    private final String SERVERADDR = "192.168.102.91";
     
     private final String REDIRECTURL = "http://"+SERVERADDR+":8080/anost/FbLogin";
     //private final Parameter ADDITIONALPARAM = Parameter.with("state", "");

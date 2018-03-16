@@ -222,6 +222,7 @@ public class AddEventDetails {
                         System.out.println("Could not connect event object or insert event or admin details. Most common problems are that event ID is wrong or the user does not have the credentials to see it. EVENT ID used: "+eventId);
                         this.message = "The event with ID <i>"+eventId+"</i> could not be found.<br/>Make sure the event ID is correct, it was not deleted from Facebook or you have the credentials to acccess it!";
                         Logger.getLogger(AddEventDetails.class.getName()).log(Level.SEVERE, null, ex);
+                        JDBCConnectionManager.closeJDBCConnection();
                     }
                 }
                 JDBCConnectionManager.closeJDBCConnection();
@@ -229,6 +230,7 @@ public class AddEventDetails {
                 System.out.println("Could not query database for event id.");
                 this.message = "Could not query database for event id.";
                 Logger.getLogger(AddEventDetails.class.getName()).log(Level.SEVERE, null, ex);
+                JDBCConnectionManager.closeJDBCConnection();
             }
         } catch (FacebookOAuthException ex) {
             System.out.println("Could not create fbClient Object. Check API version or access token.");
