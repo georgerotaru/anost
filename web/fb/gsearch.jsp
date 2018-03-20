@@ -13,11 +13,6 @@
         <%@include file="/WEB-INF/jspf/header.jspf" %>
     </head>
     <body>
-        <datalist id="locationid">
-            <option value="106076642756874">Romania</option>
-            <option value="106088726089413">Alba-Iulia</option>
-            <option value="1551290241820516">Alba county</option>
-        </datalist>
         <div class="mainscreen">
             <%@include file="/WEB-INF/jspf/menu.jspf" %>
             <form action="${pageContext.request.contextPath}/FbSearchPgOption" method="GET">
@@ -26,8 +21,16 @@
                     <tr>
                         <td><input type="submit" name="gsearcgpg_option" class="submenu" value="People/Pages"></td>
                         <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Friendship"></td>
+                        <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Friends/Followers"></td>
                         <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Photos"></td>
                         <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Events"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="submit" name="gsearcgpg_option" class="submenu" value="Places"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </table>
             </form>
@@ -41,10 +44,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext1" placeholder="name" style="color: #990000"/>/users-named
+                                            https://www.facebook.com/search/str/<input type="text" name="pp_field1" placeholder="name" style="color: #990000"/>/users-named
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="1">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp1">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -57,10 +60,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext2.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="fieldtext2.2" placeholder="location id" style="color: #339966"/><%--<input list="locationid" name="fieldtext2.2" placeholder="location id" style="color: #339966">--%>/home-residents/intersect
+                                            https://www.facebook.com/search/str/<input type="text" name="pp_field2.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="pp_field2.2" placeholder="location id" style="color: #339966"/><%--<input list="locationid" name="fieldtext2.2" placeholder="location id" style="color: #339966">--%>/home-residents/intersect
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="2">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp2">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -73,10 +76,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext3.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="fieldtext3.2" placeholder="location id" style="color: #339966"/>/residents/intersect
+                                            https://www.facebook.com/search/str/<input type="text" name="pp_field3.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="pp_field3.2" placeholder="location id" style="color: #339966"/>/residents/intersect
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="3">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp3">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -89,10 +92,42 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/<input type="number" name="fieldtext4.1" placeholder="location id" style="color: #339966"/>/home-residents/<input type="number" name="fieldtext4.2" placeholder="location id" style="color: #339966"/>/residents/intersect
+                                            https://www.facebook.com/search/<input type="number" name="pp_field4.1" placeholder="location id" style="color: #339966"/>/home-residents/<input type="number" name="pp_field4.2" placeholder="location id" style="color: #339966"/>/residents/intersect
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="4">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp4">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>People who like "<i style="color: #FF8C00">page</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="pp_field9" placeholder="page id" style="color: #FF8C00"/>/likers
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="pp9">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>People like "<i style="color: #FF8C00">page</i>" and live in "<i style="color: #339966">location</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="pp_field10.1" placeholder="location id" style="color: #339966"/>/residents/present/<input type="number" name="pp_field10.2" placeholder="page id" style="color: #FF8C00"/>/likers/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="pp10">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -105,10 +140,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/<input type="number" name="fieldtext5" placeholder="profile id" style="color: #2980B9"/>/pages-liked
+                                            https://www.facebook.com/search/<input type="number" name="pp_field5" placeholder="profile id" style="color: #2980B9"/>/pages-liked
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="5">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp5">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -121,10 +156,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/<input type="number" name="fieldtext6" placeholder="profile id" style="color: #2980B9"/>/friends/pages-liked
+                                            https://www.facebook.com/search/<input type="number" name="pp_field6" placeholder="profile id" style="color: #2980B9"/>/friends/pages-liked
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="6">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp6">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -137,10 +172,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/<input type="number" name="fieldtext7.1" placeholder="profile id" style="color: #2980B9"/>/pages-liked/<input type="number" name="fieldtext7.2" placeholder="profile id" style="color: #2980B9"/>/pages-liked/intersect
+                                            https://www.facebook.com/search/<input type="number" name="pp_field7.1" placeholder="profile id" style="color: #2980B9"/>/pages-liked/<input type="number" name="pp_field7.2" placeholder="profile id" style="color: #2980B9"/>/pages-liked/intersect
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="7">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp7">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -153,10 +188,10 @@
                                 <table width="100%">
                                     <tr>
                                         <td>
-                                            https://www.facebook.com/search/str/<input type="text" name="fieldtext8" placeholder="name" style="color: #990000"/>/pages-named
+                                            https://www.facebook.com/search/str/<input type="text" name="pp_field8" placeholder="name" style="color: #990000"/>/pages-named
                                         </td>
                                         <td width="40px">
-                                            <button type="submit" name="gsearchpg_go" value="8">GO</button>
+                                            <button type="submit" name="gsearchpg_go" value="pp8">GO</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -800,6 +835,337 @@
                                         </td>
                                         <td width="40px">
                                             <button type="submit" name="gsearchpg_go" value="friendship4">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </c:when>
+                    <c:when test="${gsearcgpgoption == 'Friends/Followers'}">
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s friends</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="ff_field1" placeholder="profile id" style="color: #2980B9"/>/friends
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff1">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s followers</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="ff_field2" placeholder="profile id" style="color: #2980B9"/>/followers
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff2">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>People followed by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="ff_field3" placeholder="profile id" style="color: #2980B9"/>/users-followed
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff3">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s photos liked by "<i style="color: #2980B9">user</i>"'s friends</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="ff_field4.1" placeholder="profile id" style="color: #2980B9"/>/photos/likers/<input type="number" name="ff_field4.2" placeholder="profile id" style="color: #2980B9"/>/friends/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff4">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s friends who live in "<i style="color: #339966">location</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="ff_field5.1" placeholder="location id" style="color: #339966"/>/residents/present/<input type="number" name="ff_field5.2" placeholder="profile id" style="color: #2980B9"/>/friends/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff5">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s friends named "<i style="color: #990000">name</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/str/<input type="text" name="ff_field6.1" placeholder="name" style="color: #990000"/>/users-named/<input type="number" name="ff_field6.2" placeholder="profile id" style="color: #2980B9"/>/friends/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="ff6">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </c:when>
+                    <c:when test="${gsearcgpgoption == 'Places'}">
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places visited by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field1" placeholder="profile id" style="color: #2980B9"/>/places-visited
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places1">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Recent places visited by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field2" placeholder="profile id" style="color: #2980B9"/>/recent-places-visited
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places2">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places checked in at by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field3" placeholder="profile id" style="color: #2980B9"/>/places-checked-in
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places3">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places visited by "<i style="color: #2980B9">user</i>" and by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field4.1" placeholder="profile id" style="color: #2980B9"/>/places-visited/<input type="number" name="places_field4.2" placeholder="profile id" style="color: #2980B9"/>/places-visited/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places4">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places named "<i style="color: #990000">name</i>" visited by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field6.1" placeholder="profile id" style="color: #2980B9"/>/places-visited/str/<input type="text" name="places_field6.2" placeholder="name" style="color: #990000"/>/places-named/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places6">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #bdb76b">Place</i>" visited by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <datalist id="placesid">
+                                                <option value="128966563840349">airports</option>
+                                                <option value="110290705711626">bars</option>
+                                                <option value="197871390225897">cafes</option>
+                                                <option value="184405378265823">gyms</option>
+                                                <option value="191478144212980">night clubs</option>
+                                                <option value="273819889375819">restaurants</option>
+                                                <option value="189018581118681">sport clubs</option>
+                                            </datalist>
+                                            https://www.facebook.com/search/<input type="number" name="places_field5.1" placeholder="profile id" style="color: #2980B9" autocomplete="off"/>/places-visited/<input list="placesid" type="number" name="places_field5.2" placeholder="place id" style="color: #bdb76b"/>/places/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places5">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places liked by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field7" placeholder="profile id" style="color: #2980B9"/>/places-liked
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places7">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places that "<i style="color: #2980B9">user</i>" works at</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field8" placeholder="profile id" style="color: #2980B9"/>/employers/present
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places8">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places that "<i style="color: #2980B9">user</i>" worked at</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field9" placeholder="profile id" style="color: #2980B9"/>/employers/past
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places9">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>"<i style="color: #2980B9">User</i>"'s friends who visited "<i style="color: #bdb76b">place</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field10.1" placeholder="place id" style="color: #bdb76b"/>/visitors/<input type="number" name="places_field10.2" placeholder="profile id" style="color: #2980B9"/>/friends/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places10">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>People who visited "<i style="color: #bdb76b">place</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field11" placeholder="place id" style="color: #bdb76b"/>/visitors
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places11">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>People who visited places visited by "<i style="color: #2980B9">user</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field12" placeholder="profile id" style="color: #2980B9"/>/places-visited/visitors
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places12">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places visited by "<i style="color: #2980B9">user</i>" and where "<i style="color: #2980B9">user</i>" is tagged in photos</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field13.1" placeholder="profile id" style="color: #2980B9"/>/places-visited/<input type="number" name="places_field13.2" placeholder="profile id" style="color: #2980B9"/>/photos-tagged/places/intersect
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places13">GO</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                        <br/>
+                        <form action="${pageContext.request.contextPath}/FbGsearch" target="_blank">
+                            <fieldset style="border-width: 1px">
+                                <legend><b>Places visited by people who like "<i style="color: #FF8C00">page</i>"</b></legend>
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            https://www.facebook.com/search/<input type="number" name="places_field14" placeholder="page id" style="color: #FF8C00"/>/likers/places-visited
+                                        </td>
+                                        <td width="40px">
+                                            <button type="submit" name="gsearchpg_go" value="places14">GO</button>
                                         </td>
                                     </tr>
                                 </table>
